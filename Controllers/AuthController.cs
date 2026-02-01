@@ -48,14 +48,14 @@ namespace SafetyWings.API.Controllers
         }
         
          [HttpPost("login")]
-        public IActionResult Login([FromBody] User loginDto)
+        public async Task<IActionResult> Login([FromBody] LoginForm model) // ТУК се използва LoginForm!
         {
             // 1. Търсим потребителя в базата по име
-            var user = _context.Users.FirstOrDefault(u => u.Username == loginDto.Username);
+            var user = _context.Users.FirstOrDefault(u => u.Username == model.Username);
             if (user == null) return Unauthorized("Грешно потребителско име или парола.");
 
             // 2. Проверяваме дали паролата съвпада (ползваме BCrypt!)
-            if (!BCrypt.Net.BCrypt.Verify(loginDto.PasswordHash, user.PasswordHash))
+            if (!BCrypt.Net.BCrypt.Verify(model.Password, user.PasswordHash))
             {
                 return Unauthorized("Грешно потребителско име или парола.");
             }
@@ -71,7 +71,7 @@ namespace SafetyWings.API.Controllers
             new Claim(ClaimTypes.Name, user.Username),
             new Claim("UserId", user.UserID.ToString())
         }),
-                Expires = DateTime.UtcNow.AddMinutes(10), // Токенът важи 1 минута
+                Expires = DateTime.UtcNow.AddDays(7), // Токенът важи 1 минута
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
                 Issuer = _configuration["Jwt:Issuer"],
                 Audience = _configuration["Jwt:Audience"]

@@ -53,8 +53,7 @@ namespace SafetyWings.API.Controllers
             // 1. Взимаме последните 20 записа от базата за конкретния пилот
             var logs = await _context.HealthLogs
                 .Where(l => l.UserID == pilotId)
-                .OrderByDescending(l => l.Timestamp)
-                .Take(20)
+                .OrderBy(l => l.Timestamp)
                 .ToListAsync();
 
             if (logs == null || !logs.Any())

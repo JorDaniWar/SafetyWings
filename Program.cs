@@ -217,12 +217,25 @@ namespace SafetyWings.API
 
             builder.Services.AddEndpointsApiExplorer();
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll",
+                    policy =>
+                    {
+                        //policy.WithOrigins("https://*.ngrok-free.app", "http://127.0.0.1:5500");
+                        policy.AllowAnyOrigin();
+                        policy.AllowAnyHeader();
+                        policy.AllowAnyMethod();
+                    });
+
+            });
             // ВНИМАНИЕ: Тук имаше втори AddSwaggerGen(), който изтрих, защото чупеше горния.
 
             var app = builder.Build();
 
             // --- MIDDLEWARE PIPELINE ---
 
+            //app.UseHttpsRedirection();
             // CORS трябва да е първи или много високо
             app.UseCors("AllowAll");
 
