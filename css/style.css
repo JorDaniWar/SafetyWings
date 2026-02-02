@@ -1,0 +1,106 @@
+:root {
+    --primary-blue: #00a8ff;    /* Неоново синьо - цвят на приборите */
+    --bg-dark: #0b0e14;         /* Дълбоко среднощно синьо/черно */
+    --card-bg: rgba(255, 255, 255, 0.05); /* Прозрачно стъкло */
+    --text-light: #e0e6ed;      /* Млечно бяло за четене */
+    --accent-red: #ff4757;      /* За грешки и критични предупреждения */
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-light);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+.login__footer {
+    position: relative;
+    margin-top: 20px;
+    bottom: 10px;
+    font-size: 0.8rem;
+    color: var(--text-light);
+    text-align: center;
+    width: 100%;
+}
+.login-card {
+    margin-top: 5px;
+    background: var(--card-bg);
+    backdrop-filter: blur(10px); /* Ефект на размито стъкло */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 2.5rem;
+    border-radius: 15px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 8px 32px 0 var(--primary-blue);
+    text-align: center;
+}
+
+h1 {
+    letter-spacing: 5px;
+    color: var(--primary-blue);
+    margin-bottom: 0.5rem;
+    text-shadow: 0 0 10px var(--primary-blue);
+}
+/* Стилизиране на полетата за писане */
+.input-group {
+    margin-bottom: 1.5rem;
+    text-align: left;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    color: var(--primary-blue);
+    letter-spacing: 1px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 0.8rem;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+    color: white;
+    outline: none;
+    transition: 0.3s;
+}
+
+.input-group input:focus {
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 10px rgba(0, 168, 255, 0.3);
+}
+
+/* МАГИЯТА: Бутонът ИЗЛИТАНЕ */
+.btn-login {
+    font-size: 25px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    width: 100%;
+    padding: 1rem;
+    background: transparent;
+    border: 2px solid var(--primary-blue);
+    color: var(--primary-blue);
+    font-weight: bold;
+    letter-spacing: 2px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.4s ease;
+    margin-top: 1rem;
+}
+
+.btn-login:hover {
+    background: var(--primary-blue);
+    color: var(--bg-dark);
+    box-shadow: 0 0 20px var(--primary-blue), 0 0 40px var(--primary-blue);
+    transform: translateY(-2px);
+}
