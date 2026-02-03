@@ -43,6 +43,9 @@ body {
     box-shadow: 0 8px 32px 0 var(--primary-blue);
     text-align: center;
 }
+.login-card:hover {
+    box-shadow: 0 12px 48px 5px var(--primary-blue);
+}
 
 h1 {
     letter-spacing: 5px;

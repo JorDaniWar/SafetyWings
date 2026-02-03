@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="css/dashboard.css"> 
+    <title>✈️ Safety Wings - Dashboard</title>
+</head>
+<body>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="logo">SW ✈️</div>
+            <nav>
+                <ul>
+                    <li><a href="#" class="active">Полети</a></li>
+                    <li><a href="#">Телеметрия</a></li>
+                    <li><a href="#">Системи</a></li>
+                    <button type="button" class="logout-btn" id="logout-btn">Изход</button>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="status-bar">
+                <h1>Системен панел</h1>
+                <div id="cloud-status">📡 ВРЪЗКА: OFFLINE</div>
+            </header>
+            
+            <section class="grid-stats">
+                <div class="stat-card">Височина: <span id="alt-val">0 m</span></div>
+                <div class="stat-card">Скорост: <span id="speed-val">0 km/h</span></div>
+                <div class="stat-card">Гориво: <span id="fuel-val">100%</span></div>
+            </section>
+        </main>
+    </div>
+    <script src="js/dashboard.js"></script>
+</body>
+</html>
