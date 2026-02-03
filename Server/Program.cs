@@ -147,6 +147,17 @@ namespace SafetyWings.API
                           .AllowAnyHeader();
                 });
             });
+            // Позволяваме на фронтенда да говори с бекенда
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowFrontend",
+                    policy =>
+                    {
+                        policy.AllowAnyOrigin() // В училище е най-лесно така, за да не се бориш с портове
+                              .AllowAnyMethod()
+                              .AllowAnyHeader();
+                    });
+            });
 
             // 2. JWT Автентикация
             builder.Services.AddAuthentication(options =>
@@ -237,6 +248,7 @@ namespace SafetyWings.API
 
             //app.UseHttpsRedirection();
             // CORS трябва да е първи или много високо
+            app.UseCors("AlloFrontend");
             app.UseCors("AllowAll");
 
             // Swagger винаги включен за тестовете
@@ -248,7 +260,10 @@ namespace SafetyWings.API
             });
 
             // ВАЖНО: КОМЕНТИРАМЕ ТОВА, ЗА ДА РАБОТИ NGROK НА ПОРТ 80
-            // app.UseHttpsRedirection(); 
+            if (builder.Configuration["USE_NGROK"] != "true")
+            {
+                app.UseHttpsRedirection();
+            }
 
             app.UseAuthentication();
             app.UseAuthorization();
