@@ -1,22 +1,18 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\zala2000\\source\\repos\\SafetyWings\\",
+  "WorkspaceRootPath": "C:\\Users\\SL\\Desktop\\\u0414\u0438\u043F\u043B\u043E\u043C\u043D\u0430 \u0440\u0430\u0431\u043E\u0442\u0430\\\u0414\u0438\u043F\u043B\u043E\u043C\u043D\u0430 \u0440\u0430\u0431\u043E\u0442\u0430 2\\SafetyWingsBackEnd\\SafetyWings.API\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{2E4EFECE-295E-465C-A604-8849926971AD}|SafetyWings.API.csproj|c:\\users\\zala2000\\source\\repos\\safetywings\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2E4EFECE-295E-465C-A604-8849926971AD}|SafetyWings.API.csproj|solutionrelative:controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|c:\\users\\zala2000\\source\\repos\\safetywings\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{2E4EFECE-295E-465C-A604-8849926971AD}|SafetyWings.API.csproj|c:\\users\\zala2000\\source\\repos\\safetywings\\models\\loginform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2E4EFECE-295E-465C-A604-8849926971AD}|SafetyWings.API.csproj|solutionrelative:models\\loginform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|c:\\users\\zala2000\\source\\repos\\safetywings\\models\\loginform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{2E4EFECE-295E-465C-A604-8849926971AD}|SafetyWings.API.csproj|c:\\users\\zala2000\\source\\repos\\safetywings\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2E4EFECE-295E-465C-A604-8849926971AD}|SafetyWings.API.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|c:\\users\\zala2000\\source\\repos\\safetywings\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{2E4EFECE-295E-465C-A604-8849926971AD}|SafetyWings.API.csproj|c:\\users\\zala2000\\source\\repos\\safetywings\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{2E4EFECE-295E-465C-A604-8849926971AD}|SafetyWings.API.csproj|solutionrelative:properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|c:\\users\\zala2000\\source\\repos\\safetywings\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -26,8 +22,16 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 6,
           "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:129:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{b1e99781-ab81-11d0-b683-00aa00a3ee26}"
@@ -45,22 +49,21 @@
               "DocumentIndex": 1,
               "Title": "LoginForm.cs",
               "DocumentMoniker": "C:\\Users\\zala2000\\source\\repos\\SafetyWings\\Models\\LoginForm.cs",
-              "RelativeDocumentMoniker": "Models\\LoginForm.cs",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\..\\zala2000\\source\\repos\\SafetyWings\\Models\\LoginForm.cs",
               "ToolTip": "C:\\Users\\zala2000\\source\\repos\\SafetyWings\\Models\\LoginForm.cs",
-              "RelativeToolTip": "Models\\LoginForm.cs",
+              "RelativeToolTip": "..\\..\\..\\..\\..\\..\\zala2000\\source\\repos\\SafetyWings\\Models\\LoginForm.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-03T15:10:12.823Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-03T15:10:12.823Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
               "Title": "AuthController.cs",
               "DocumentMoniker": "C:\\Users\\zala2000\\source\\repos\\SafetyWings\\Controllers\\AuthController.cs",
-              "RelativeDocumentMoniker": "Controllers\\AuthController.cs",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\..\\zala2000\\source\\repos\\SafetyWings\\Controllers\\AuthController.cs",
               "ToolTip": "C:\\Users\\zala2000\\source\\repos\\SafetyWings\\Controllers\\AuthController.cs",
-              "RelativeToolTip": "Controllers\\AuthController.cs",
+              "RelativeToolTip": "..\\..\\..\\..\\..\\..\\zala2000\\source\\repos\\SafetyWings\\Controllers\\AuthController.cs",
               "ViewState": "AgIAADIAAAAAAAAAAAAYwD8AAAARAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-02-03T15:07:26.965Z",
@@ -68,29 +71,27 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 2,
               "Title": "launchSettings.json",
               "DocumentMoniker": "C:\\Users\\zala2000\\source\\repos\\SafetyWings\\Properties\\launchSettings.json",
-              "RelativeDocumentMoniker": "Properties\\launchSettings.json",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\..\\zala2000\\source\\repos\\SafetyWings\\Properties\\launchSettings.json",
               "ToolTip": "C:\\Users\\zala2000\\source\\repos\\SafetyWings\\Properties\\launchSettings.json",
-              "RelativeToolTip": "Properties\\launchSettings.json",
+              "RelativeToolTip": "..\\..\\..\\..\\..\\..\\zala2000\\source\\repos\\SafetyWings\\Properties\\launchSettings.json",
               "ViewState": "AgIAAA8AAAAAAAAAAAAAABoAAABFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2026-02-03T14:28:04.309Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-03T14:28:04.309Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\zala2000\\source\\repos\\SafetyWings\\Program.cs",
-              "RelativeDocumentMoniker": "Program.cs",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\..\\zala2000\\source\\repos\\SafetyWings\\Program.cs",
               "ToolTip": "C:\\Users\\zala2000\\source\\repos\\SafetyWings\\Program.cs",
-              "RelativeToolTip": "Program.cs",
+              "RelativeToolTip": "..\\..\\..\\..\\..\\..\\zala2000\\source\\repos\\SafetyWings\\Program.cs",
               "ViewState": "AgIAAMEAAAAAAAAAAAAgwNMAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-03T14:22:51.677Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-03T14:22:51.677Z"
             }
           ]
         },
