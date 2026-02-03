@@ -219,7 +219,7 @@ namespace SafetyWings.API
             builder.WebHost.ConfigureKestrel(options =>
             {
                 // Слушай на порт 80 за всяко устройство
-                options.ListenAnyIP(80);
+                options.ListenAnyIP(7000);
             });
 
             builder.Services.AddControllers();

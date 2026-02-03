@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.EntityFrameworkCore;
 
 namespace SafetyWings.API.Controllers
 {
@@ -51,36 +52,39 @@ namespace SafetyWings.API.Controllers
         public async Task<IActionResult> Login([FromBody] LoginForm model) // ТУК се използва LoginForm!
         {
             // 1. Търсим потребителя в базата по име
-            var user = _context.Users.FirstOrDefault(u => u.Username == model.Username);
-            if (user == null) return Unauthorized("Грешно потребителско име или парола.");
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == model.Username);
 
-            // 2. Проверяваме дали паролата съвпада (ползваме BCrypt!)
-            if (!BCrypt.Net.BCrypt.Verify(model.Password, user.PasswordHash))
-            {
-                return Unauthorized("Грешно потребителско име или парола.");
-            }
+            if (model == null) return BadRequest("Данните липсват");
+                if (user == null) return Unauthorized("Грешно потребителско име или парола.");
 
-            // 3. Ако всичко е наред, генерираме JWT токен
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_configuration["Jwt:Key"]);
-
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new[]
+                // 2. Проверяваме дали паролата съвпада (ползваме BCrypt!)
+                if (!BCrypt.Net.BCrypt.Verify(model.Password, user.PasswordHash))
                 {
-            new Claim(ClaimTypes.Name, user.Username),
-            new Claim("UserId", user.UserID.ToString())
+                    return Unauthorized("Грешно потребителско име или парола.");
+                }
+
+                // 3. Ако всичко е наред, генерираме JWT токен
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var key = Encoding.ASCII.GetBytes(_configuration["Jwt:Key"]);
+
+                var tokenDescriptor = new SecurityTokenDescriptor
+                {
+                    Subject = new ClaimsIdentity(new[]
+                    {
+                new Claim(ClaimTypes.Name, user.Username),
+                new Claim("UserId", user.UserID.ToString())
         }),
-                Expires = DateTime.UtcNow.AddDays(7), // Токенът важи 1 минута
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
-                Issuer = _configuration["Jwt:Issuer"],
-                Audience = _configuration["Jwt:Audience"]
-            };
+                    Expires = DateTime.UtcNow.AddDays(7), // Токенът важи 1 минута
+                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
+                    Issuer = _configuration["Jwt:Issuer"],
+                    Audience = _configuration["Jwt:Audience"]
+                };
 
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            var tokenString = tokenHandler.WriteToken(token);
+                var token = tokenHandler.CreateToken(tokenDescriptor);
+                var tokenString = tokenHandler.WriteToken(token);
 
-            return Ok(new { Token = tokenString, Message = "Успешен вход!" });
+                return Ok(new { Token = tokenString, Message = "Успешен вход!" });
+            
         }
     }
 }
