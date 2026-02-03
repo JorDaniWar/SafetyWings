@@ -178,7 +178,8 @@ namespace SafetyWings.API
                     IssuerSigningKey = new SymmetricSecurityKey(key)
                 };
             });
-
+            
+            // Added a test to see if this shit is working
             // 3. Swagger с JWT поддръжка
             builder.Services.AddSwaggerGen(c =>
             {
