@@ -7,6 +7,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
+using SafetyWings.API.Services;
 
 namespace SafetyWings.API.Controllers
 {
@@ -24,20 +25,34 @@ namespace SafetyWings.API.Controllers
         }
 
         [HttpPost("register")]
-        public IActionResult Register(User user)
+        public async Task<IActionResult> Register([FromBody] RegisterForm model)
         {
-            // 1. Хешираме паролата (Сигурност!)
-            user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(user.PasswordHash);
+            // 1. Проверяваме дали такъв потребител вече съществува
+            var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Username == model.Username);
 
-            // 2. Добавяме потребителя в списъка
-            _context.Users.Add(user);
+            if (existingUser != null)
+            {
+                // Връщаме 400 или 409, защото заявката е невалидна (потребителят вече е там)
+                return BadRequest("Потребителят вече съществува.");
+            }
 
-            // 3. Казваме на DbContext да изпрати промените към SQL
-            _context.SaveChanges();
+            // 2. Хешираме паролата (НИКОГА не пази чист текст!)
+            string hashedPassword = BCrypt.Net.BCrypt.HashPassword(model.Password);
 
-            return Ok("Пилотът е регистриран успешно!");
+            // 3. Създаваме новия обект за базата данни
+            var newUser = new User
+            {
+                Username = model.Username,
+                PasswordHash = hashedPassword, // Тук записваме хеша
+            };
+
+            // 4. Запазваме в базата
+            _context.Users.Add(newUser);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Регистрацията е успешна!" });
         }
-        
+
         [HttpDelete("delete")]
         public IActionResult DeleteUser(int id)
         {

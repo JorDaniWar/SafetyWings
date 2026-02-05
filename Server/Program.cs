@@ -135,11 +135,11 @@ namespace SafetyWings.API
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Взема ключа от appsettings.json. Увери се, че не е null.
-            var keyStr = builder.Configuration["Jwt:Key"];
-            var key = Encoding.ASCII.GetBytes(keyStr ?? "SecretKeyMustBeLongerThan16Chars_ChangeThisInProd");
+            // 1. JWT Key Setup
+            var keyStr = builder.Configuration["Jwt:Key"] ?? "SecretKeyMustBeLongerThan16Chars_ChangeThisInProd";
+            var key = Encoding.ASCII.GetBytes(keyStr);
 
-            // 1. CORS - Това е супер, остави го така
+            // 2. CORS - Една политика за всичко (най-лесно за разработка)
             builder.Services.AddCors(options => {
                 options.AddPolicy("AllowAll", policy => {
                     policy.AllowAnyOrigin()
@@ -147,26 +147,13 @@ namespace SafetyWings.API
                           .AllowAnyHeader();
                 });
             });
-            // Позволяваме на фронтенда да говори с бекенда
-            builder.Services.AddCors(options =>
-            {
-                options.AddPolicy("AllowFrontend",
-                    policy =>
-                    {
-                        policy.AllowAnyOrigin() // В училище е най-лесно така, за да не се бориш с портове
-                              .AllowAnyMethod()
-                              .AllowAnyHeader();
-                    });
-            });
 
-            // 2. JWT Автентикация
-            builder.Services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = "Bearer";
-                options.DefaultChallengeScheme = "Bearer";
+            // 3. Authentication & JWT
+            builder.Services.AddAuthentication(options => {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-            .AddJwtBearer("Bearer", options =>
-            {
+            .AddJwtBearer(options => {
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,
@@ -178,97 +165,59 @@ namespace SafetyWings.API
                     IssuerSigningKey = new SymmetricSecurityKey(key)
                 };
             });
-            
-            // Added a test to see if this shit is working
-            // 3. Swagger с JWT поддръжка
-            builder.Services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "SafetyWings API", Version = "v1" });
 
+            // 4. Swagger
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen(c => {
+                c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "SafetyWings API", Version = "v1" });
                 c.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
                 {
-                    Description = "Въведи токена в този формат: Bearer {your_token}",
+                    Description = "Bearer {token}",
                     Name = "Authorization",
                     In = Microsoft.OpenApi.Models.ParameterLocation.Header,
                     Type = Microsoft.OpenApi.Models.SecuritySchemeType.ApiKey,
                     Scheme = "Bearer"
                 });
-
-                c.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
-                {
-                    {
-                        new Microsoft.OpenApi.Models.OpenApiSecurityScheme
-                        {
-                            Reference = new Microsoft.OpenApi.Models.OpenApiReference
-                            {
-                                Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
-                                Id = "Bearer"
-                            }
-                        },
-                        new string[] {}
-                    }
-                });
-            });
-
-            // 4. База данни
-            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-            builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(connectionString));
-
-            // 5. Port Configuration
-            builder.WebHost.ConfigureKestrel(options =>
+                c.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement {
             {
-                // Слушай на порт 80 за всяко устройство
-                options.ListenAnyIP(7000);
+                new Microsoft.OpenApi.Models.OpenApiSecurityScheme {
+                    Reference = new Microsoft.OpenApi.Models.OpenApiReference { Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme, Id = "Bearer" }
+                }, new string[] {}
+            }
+        });
             });
+
+            builder.Services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             builder.Services.AddControllers();
-
-            // Регистриране на EncryptionService
             builder.Services.AddSingleton<SafetyWings.API.Services.EncryptionService>();
 
-            builder.Services.AddEndpointsApiExplorer();
-
-            builder.Services.AddCors(options =>
-            {
-                options.AddPolicy("AllowAll",
-                    policy =>
-                    {
-                        //policy.WithOrigins("https://*.ngrok-free.app", "http://127.0.0.1:5500");
-                        policy.AllowAnyOrigin();
-                        policy.AllowAnyHeader();
-                        policy.AllowAnyMethod();
-                    });
-
-            });
-            // ВНИМАНИЕ: Тук имаше втори AddSwaggerGen(), който изтрих, защото чупеше горния.
+            // ПРЕМАХВАМЕ РЪЧНИЯ ListenAnyIP(7000), за да оставим launchSettings.json да командва парада!
 
             var app = builder.Build();
 
-            // --- MIDDLEWARE PIPELINE ---
+            // --- MIDDLEWARE ---
+            app.UseCors("AllowAll"); // Сега името съвпада точно
 
-            //app.UseHttpsRedirection();
-            // CORS трябва да е първи или много високо
-            app.UseCors("AlloFrontend");
-            app.UseCors("AllowAll");
-
-            // Swagger винаги включен за тестовете
             app.UseSwagger();
-            app.UseSwaggerUI(c =>
-            {
+            app.UseSwaggerUI(c => {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Safety Wings API v1");
                 c.RoutePrefix = "swagger";
             });
 
-            // ВАЖНО: КОМЕНТИРАМЕ ТОВА, ЗА ДА РАБОТИ NGROK НА ПОРТ 80
-            if (builder.Configuration["USE_NGROK"] != "true")
+            // Интелигентно пренасочване към HTTPS (само ако не сме в NGrok)
+            // Ако сме в NGrok режим, слушаме на порт 80
+            if (builder.Configuration["USE_NGROK"] == "true")
             {
-                app.UseHttpsRedirection();
+                builder.WebHost.ConfigureKestrel(options =>
+                {
+                    options.ListenAnyIP(80);
+                });
             }
 
             app.UseAuthentication();
             app.UseAuthorization();
-
             app.MapControllers();
 
             app.Run();
