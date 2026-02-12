@@ -1,10 +1,91 @@
+html, body {
+    max-width: 100%;
+    overflow-x: hidden; /* Забранява хоризонталния скрол на цялата страница */
+}
 *{
     color: #00a8ff;
     font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+    
 }
+a {
+    text-decoration: none;
+    position: relative;
+    display: inline-block;
+    color: #00a8ff;
+    padding-bottom: 5px;
+}
+
+a::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 3px;
+    bottom: 0;
+    left: 0;
+    background-color: #00a8ff;
+    transform: scaleX(0); /* Скрита в началото */
+}
+
+/* Клас за влизане - задейства се при hover */
+.anim-in::after {
+    animation: slideIn 0.5s forwards ease-in-out;
+}
+
+/* Клас за излизане - задейства се при махане на мишката */
+.anim-out::after {
+    animation: slideOut 0.5s forwards ease-in-out;
+}
+
+@keyframes slideIn {
+    0% { transform: scaleX(0); transform-origin: bottom left; }
+    100% { transform: scaleX(1); transform-origin: bottom left; }
+}
+
+@keyframes slideOut {
+    0% { transform: scaleX(1); transform-origin: bottom right; }
+    100% { transform: scaleX(0); transform-origin: bottom right; }
+}
+/* a:hover{
+    text-decoration: underline;
+} */
+
+
 body{
     background-color: #0b0e14;
+    margin-left: 0px;
+    margin-right: 0px;
 }
+.main-content{
+    transform: translateX(-40px);
+}
+.header{
+
+    position: sticky;
+    top: 0;
+    z-index: 1000; /* Гарантира, че хедърът ще е НАД всичко останало при скрол */
+    background-color:#0b0e14;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 80px;
+    color: #00a8ff;
+    border-bottom: solid;
+    display: flex;         
+    align-items: center;    /* Центрира бутона и логото вертикално */
+    justify-content: flex-start; /* Подрежда ги отляво надясно */
+    padding: 0 0 0 20px;        /* Малко разстояние от краищата */
+    gap: 20px;
+}
+.header button{
+    height: 40px;
+    width: 4cqb;
+    cursor: pointer
+}
+.logo{
+    font-size: 40px;
+    font-weight: bold;
+}
+
 .dashboard-container {
     display: grid;
     grid-template-columns: 250px 1fr;
@@ -12,7 +93,9 @@ body{
 }
 
 
-
+section{
+    scroll-margin-top: 100px;
+}
 .stat-card {
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(0, 168, 255, 0.3);
@@ -21,28 +104,45 @@ body{
     box-shadow: inset 0 0 10px rgba(0, 168, 255, 0.1);
 }
 
-.sidebar {
-    width: 120px;
-    border-right: 2px solid #00a8ff;
-    z-index: 1000;
-    padding: 2rem;
-}
+/* sidebar*/
 
+.sidebar {
+    width: 140px;
+    border-right: 2px solid #00a8ff;
+
+}
+.sidebar ul{
+    list-style: none;
+    padding-top: 0px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
 .sidebar button{
+    width: 100%;
+    padding-left: auto;
+    padding-right: auto;
     letter-spacing: 2px;
     position: relative;
     font-size: 20px;
     margin-top: 1rem;
     background-color: #0b0e14;
-    color: #00a8ff;
-    border-color: #00a8ff;
+    color: red;
+    border-color: red;
     border-radius: 10px;   
     transition: all 0.4s ease;
     cursor: pointer;
     font-weight: bold;
 }
 .sidebar button:hover{
-    color: #0b0e14;
-    background-color: #00a8ff;
-    box-shadow: 0 0 10px 5px #00a8ff;
+    color: #fff;
+    background-color: red;
+    box-shadow: 0 0 10px 5px red;
+}
+.sidebar .sidebar-header{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 20px;
+
 }

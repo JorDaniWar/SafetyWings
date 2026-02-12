@@ -3,33 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="css/dashboard.css"> 
-    <title>✈️ Safety Wings - Dashboard</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✈️</text></svg>">
+    <title> Safety Wings - Dashboard</title>
 </head>
 <body>
+    <header class="header">
+        <button class="sidebar-button"></button>
+        <div class="logo" href="dashboard.html">✈️ Safety Wings</div>
+    </header>
     <div class="dashboard-container">
-        <aside class="sidebar">
-            <div class="logo">✈️ Safety Wings</div>
-            <nav>
+        <aside class="sidebar">  
+            <nav class="sidebar-nav">
+                <header class="sidebar-header">
+                    <h2>Меню</h2>
+                </header>
                 <ul>
-                    <li><a href="#" class="active">Полети</a></li>
+                    <li><a href="#last-flights">Последни</a></li>
                     <li><a href="#">Телеметрия</a></li>
                     <li><a href="#">Системи</a></li>
-                    <button type="button" class="logout-btn" onclick="logout()" 
-                    id="logout-btn">Изход</button>
                 </ul>
+                <button type="button" class="logout-btn" onclick="logout()" 
+                    id="logout-btn">Изход</button>
             </nav>
         </aside>
 
         <main class="main-content">
-            <header class="status-bar">
-                <h1>Системен панел</h1>
+            <section class="last-flights" id="last-flights">
+                <header class="status-bar">
+                <h1>Последни полети</h1>
                 <div id="cloud-status">📡 ВРЪЗКА: OFFLINE</div>
-            </header>
-            
-            <section class="grid-stats">
+                <section class="grid-stats">
                 <div class="stat-card">Височина: <span id="alt-val">0 m</span></div>
                 <div class="stat-card">Скорост: <span id="speed-val">0 km/h</span></div>
                 <div class="stat-card">Гориво: <span id="fuel-val">100%</span></div>
+            </section>
+            </header>          
             </section>
         </main>
     </div>
