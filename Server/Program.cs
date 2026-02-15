@@ -1,9 +1,10 @@
-﻿
+﻿using Microsoft.Extensions.FileProviders;
 using Microsoft.EntityFrameworkCore;
 using SafetyWings.API.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.AspNetCore.HttpOverrides;
 
 //namespace SafetyWings.API
 //{
@@ -195,26 +196,52 @@ namespace SafetyWings.API
 
             // ПРЕМАХВАМЕ РЪЧНИЯ ListenAnyIP(7000), за да оставим launchSettings.json да командва парада!
 
+            
+
+
             var app = builder.Build();
 
             // --- MIDDLEWARE ---
             app.UseCors("AllowAll"); // Сега името съвпада точно
+            if (app.Environment.IsEnvironment("Ngrok"))
+            {
+                // Tell .NET to accept the ngrok proxy headers
+                app.UseForwardedHeaders(new ForwardedHeadersOptions
+                {
+                    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+                });
+            }
+            else
+            {
+                // Only force HTTPS if we are NOT using ngrok. 
+                // (ngrok hates local HTTPS redirection)
+                app.UseHttpsRedirection();
+            }
 
-            app.UseSwagger();
-            app.UseSwaggerUI(c => {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Safety Wings API v1");
-                c.RoutePrefix = "swagger";
+            if (app.Environment.IsDevelopment() || app.Environment.IsEnvironment("Ngrok"))
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI();
+            }
+
+            // 1. Намираме точния път до папката Client (тя е едно ниво назад от Server)
+            var clientFolderPath = Path.Combine(builder.Environment.ContentRootPath, "..", "Client");
+
+            // 2. Казваме на .NET да зарежда index.html по подразбиране
+            app.UseDefaultFiles(new DefaultFilesOptions
+            {
+                FileProvider = new PhysicalFileProvider(Path.GetFullPath(clientFolderPath))
+            });
+
+            // 3. Казваме на .NET да сервира всички статични файлове (CSS, JS, Изображения) от Client папката
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(Path.GetFullPath(clientFolderPath))
             });
 
             // Интелигентно пренасочване към HTTPS (само ако не сме в NGrok)
             // Ако сме в NGrok режим, слушаме на порт 80
-            if (builder.Configuration["USE_NGROK"] == "true")
-            {
-                builder.WebHost.ConfigureKestrel(options =>
-                {
-                    options.ListenAnyIP(80);
-                });
-            }
+
 
             app.UseAuthentication();
             app.UseAuthorization();

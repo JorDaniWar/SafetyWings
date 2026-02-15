@@ -32,20 +32,20 @@
     "NGrok Mode": {
       "commandName": "Project",
       "dotnetRunMessages": true,
+      "launchBrowser": false,
+      "applicationUrl": "http://localhost:8080",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Ngrok",
+        "USE_NGROK": "true"
+      }
+    },
+    "IIS Express": {
+      "commandName": "IISExpress",
       "launchBrowser": true,
       "launchUrl": "swagger",
-      "applicationUrl": "http://localhost:80",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "USE_NGROK": "true"
-      },
-      "IIS Express": {
-        "commandName": "IISExpress",
-        "launchBrowser": true,
-        "launchUrl": "swagger",
-        "environmentVariables": {
-          "ASPNETCORE_ENVIRONMENT": "Development"
-        }
+        "ASPNETCORE_ENVIRONMENT": "Development"
       }
     }
+  }
   }
