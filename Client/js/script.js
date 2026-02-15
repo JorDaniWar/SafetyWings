@@ -11,7 +11,7 @@ loginForm.addEventListener('submit', async (e) => {
     console.log("Опит за вход на:", username);
 
     try {
-        const response = await fetch('http://localhost:7000/api/auth/login', {
+        const response = await fetch('/api/auth/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username, password })
