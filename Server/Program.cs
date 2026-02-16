@@ -225,18 +225,16 @@ namespace SafetyWings.API
             }
 
             // 1. Намираме точния път до папката Client (тя е едно ниво назад от Server)
-            var clientFolderPath = Path.Combine(builder.Environment.ContentRootPath, "..", "Client");
-
-            // 2. Казваме на .NET да зарежда index.html по подразбиране
-            app.UseDefaultFiles(new DefaultFilesOptions
-            {
-                FileProvider = new PhysicalFileProvider(Path.GetFullPath(clientFolderPath))
-            });
-
-            // 3. Казваме на .NET да сервира всички статични файлове (CSS, JS, Изображения) от Client папката
+            app.UseDefaultFiles(); // Търси index.html в wwwroot по подразбиране
             app.UseStaticFiles(new StaticFileOptions
             {
-                FileProvider = new PhysicalFileProvider(Path.GetFullPath(clientFolderPath))
+                OnPrepareResponse = ctx =>
+                {
+                    // Тези заглавки казват на браузъра и на ngrok да не пазят копия
+                    ctx.Context.Response.Headers.Append("Cache-Control", "no-cache, no-store, must-revalidate");
+                    ctx.Context.Response.Headers.Append("Pragma", "no-cache");
+                    ctx.Context.Response.Headers.Append("Expires", "0");
+                }
             });
 
             // Интелигентно пренасочване към HTTPS (само ако не сме в NGrok)
