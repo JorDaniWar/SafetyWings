@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Safety Wings - Регистрация</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✈️</text></svg>">
+    <link rel="stylesheet" href="css/register.css">
+</head>
+<body class="aviation-theme">
+    <div class="register-container">
+        <header>
+            <h1>✈️ SAFETY WINGS</h1>
+            <p>Система за авиационен мониторинг</p>
+        </header>
+        
+        <main class="register-card">
+            <form id="register-form">
+                <div class="input-group">
+                    <label for="username">Потребителско име</label>
+                    <input type="text" id="username" placeholder="Вашето потребителско име">
+                </div>
+                <div class="input-group">
+                    <label for="first-name">Име</label>
+                    <input type="text" id="first-name" placeholder="Вашето име">
+                </div>
+                <div class="input-group">
+                    <label for="last-name">Фамилия</label>
+                    <input type="text" id="last-name" placeholder="Вашата фамилия">
+                </div>
+                <section class="password-section">
+                    <div class="input-group">
+                        <label for="password">Парола</label>
+                        <input type="password" id="password"  placeholder="••••••••">
+                    </div>
+                    <div class="input-group">
+                        <label for="confirm-password">Потвърдете паролата</label>
+                        <input type="password" id="confirm-password"  placeholder="••••••••">
+                    </div>
+                </section>
+                
+                <button type="submit" class="btn-register" id="btn-register"> 🛫 Регистрация!</button>
+            </form>
+            <div id="message"></div>
+        </main>
+
+        <footer class="register__footer">
+            <p>Вече имате профил? <a href="index.html">Влезте тук</a></p>
+            <p>&copy; 2026 Safety Wings Project. Всички права запазени. </p>
+        </footer>
+
+        
+    </div>
+    <script src="js/script.js"></script>
+</body>
+</html>

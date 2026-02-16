@@ -35,7 +35,7 @@ body {
     align-items: center;
     overflow: hidden;
 }
-.login__footer {
+.register__footer {
     position: relative;
     margin-top: 20px;
     bottom: 10px;
@@ -44,7 +44,7 @@ body {
     text-align: center;
     width: 100%;
 }
-.login-card {
+.register-card {
     margin-top: 5px;
     background: var(--card-bg);
     backdrop-filter: blur(10px); /* Ефект на размито стъкло */
@@ -56,8 +56,11 @@ body {
     box-shadow: 0 8px 32px 0 var(--primary-blue);
     text-align: center;
 }
-.login-card:hover {
+.register-card:hover {
     box-shadow: 0 12px 48px 5px var(--primary-blue);
+}
+#register-form > .password-section {
+    margin-top: 75px;
 }
 
 h1 {
@@ -98,7 +101,7 @@ h1 {
 }
 
 /* МАГИЯТА: Бутонът ИЗЛИТАНЕ */
-.btn-login {
+.btn-register {
     font-size: 25px;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     width: 100%;
@@ -114,7 +117,7 @@ h1 {
     margin-top: 1rem;
 }
 
-.btn-login:hover {
+.btn-register:hover {
     background: var(--primary-blue);
     color: var(--bg-dark);
     box-shadow: 0 0 20px var(--primary-blue), 0 0 40px var(--primary-blue);
