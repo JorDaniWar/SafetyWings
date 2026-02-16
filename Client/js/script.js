@@ -27,4 +27,4 @@ loginForm.addEventListener('submit', async (e) => {
     } catch (err) {
         console.error("Грешка при връзка:", err);
     }
-})
+});
