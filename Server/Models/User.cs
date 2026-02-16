@@ -14,8 +14,15 @@ namespace SafetyWings.API.Models
         public string Username { get; set; }
 
         [Required]
+        public string FirstName { get; set; }
+        [Required] 
+        public string LastName { get; set; }
+
+        [Required]
         public string PasswordHash { get; set; }
 
         public string UserRole { get; set; } = "Pilot"; // По подразбиране
+
+        public DateTime DateCreated { get; set; } = DateTime.Now;
     }
 }

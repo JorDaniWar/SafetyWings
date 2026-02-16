@@ -44,6 +44,8 @@ namespace SafetyWings.API.Controllers
             {
                 Username = model.Username,
                 PasswordHash = hashedPassword, // Тук записваме хеша
+                FirstName = model.FirstName,
+                LastName = model.LastName
             };
 
             // 4. Запазваме в базата
