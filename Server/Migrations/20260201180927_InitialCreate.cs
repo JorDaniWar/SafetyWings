@@ -37,9 +37,13 @@ namespace SafetyWings.API.Migrations
                     UserID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Username = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(30)", nullable: false),
+                    LastName = table.Column<string>(type:"nvarchar(30)", nullable: false),
                     PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UserRole = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
+                    UserRole = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DateCreated = table.Column<DateTime>(type: "datetime()", nullable: false)
+                    
+                    },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.UserID);

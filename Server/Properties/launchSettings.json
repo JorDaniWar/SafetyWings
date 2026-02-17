@@ -36,7 +36,8 @@
       "applicationUrl": "http://localhost:8080",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Devolopment",
-        "USE_NGROK": "true"
+        "USE_NGROK": "true",
+        "Jwt__Key": "SafetyWings_Super_Secret_API_Key_2024_!@#_12345"
       }
     },
     "IIS Express": {
