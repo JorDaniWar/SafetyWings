@@ -1,9 +1,9 @@
 :root {
-    --primary-blue: #00a8ff;    /* Неоново синьо - цвят на приборите */
-    --bg-dark: #0b0e14;         /* Дълбоко среднощно синьо/черно */
-    --card-bg: rgba(255, 255, 255, 0.05); /* Прозрачно стъкло */
-    --text-light: #e0e6ed;      /* Млечно бяло за четене */
-    --accent-red: #ff4757;      /* За грешки и критични предупреждения */
+    --primary-blue: #00a8ff;    
+    --bg-dark: #0b0e14;          
+    --card-bg: rgba(255, 255, 255, 0.05); 
+    --text-light: #e0e6ed;      
+    --accent-red: #ff4757;     
 }
 
 * {
@@ -21,9 +21,9 @@ a:hover {
     color: purple;
     text-decoration: underline;
     text-shadow: 
-        0 0 5px var(--primary-blue),   /* 1. Плътно, близко сияние (много интензивно) */
-        0 0 15px var(--primary-blue),  /* 2. Среден ореол */
-        0 0 30px var(--primary-blue);  /* 3. Широко, меко разпръскване */
+        0 0 5px var(--primary-blue),     
+        0 0 15px var(--primary-blue),    
+        0 0 30px var(--primary-blue);    
     font-weight: bold;
 }
 body {
@@ -33,7 +33,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow: hidden;
+    overflow: auto; 
 }
 .login__footer {
     position: relative;
@@ -47,7 +47,7 @@ body {
 .login-card {
     margin-top: 5px;
     background: var(--card-bg);
-    backdrop-filter: blur(10px); /* Ефект на размито стъкло */
+    backdrop-filter: blur(10px);  
     border: 1px solid rgba(255, 255, 255, 0.1);
     padding: 2.5rem;
     border-radius: 15px;
@@ -66,7 +66,6 @@ h1 {
     margin-bottom: 0.5rem;
     text-shadow: 0 0 10px var(--primary-blue);
 }
-/* Стилизиране на полетата за писане */
 .input-group {
     margin-bottom: 1.5rem;
     text-align: left;
@@ -97,7 +96,6 @@ h1 {
     box-shadow: 0 0 10px rgba(0, 168, 255, 0.3);
 }
 
-/* МАГИЯТА: Бутонът ИЗЛИТАНЕ */
 .btn-login {
     font-size: 25px;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;

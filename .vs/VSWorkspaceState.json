@@ -1,11 +1,7 @@
 {
   "ExpandedNodes": [
-    "",
-    "\\Client",
-    "\\Client\\js",
-    "\\Server",
-    "\\Server\\Properties"
+    ""
   ],
-  "SelectedNode": "\\Server\\SafetyWings.API.sln",
+  "SelectedNode": "\\SafetyWings.API.sln",
   "PreviewInSolutionExplorer": false
 }

@@ -35,7 +35,7 @@
       "launchBrowser": false,
       "applicationUrl": "http://localhost:8080",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Ngrok",
+        "ASPNETCORE_ENVIRONMENT": "Devolopment",
         "USE_NGROK": "true"
       }
     },

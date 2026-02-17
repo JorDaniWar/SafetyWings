@@ -28,13 +28,14 @@ namespace SafetyWings.API.Controllers
         public async Task<IActionResult> Register([FromBody] RegisterForm model)
         {
             // 1. Проверяваме дали такъв потребител вече съществува
-            var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Username == model.Username);
-
-            if (existingUser != null)
+            if (model == null)
             {
                 // Връщаме 400 или 409, защото заявката е невалидна (потребителят вече е там)
                 return BadRequest("Потребителят вече съществува.");
             }
+            var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Username == model.Username);
+
+            
 
             // 2. Хешираме паролата (НИКОГА не пази чист текст!)
             string hashedPassword = BCrypt.Net.BCrypt.HashPassword(model.Password);
@@ -93,7 +94,7 @@ namespace SafetyWings.API.Controllers
         }),
                     Expires = DateTime.UtcNow.AddDays(7), // Токенът важи 1 минута
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
-                    Issuer = _configuration["Jwt:Issuer"],
+                    Issuer = _configuration["Jwt:Issuer"],  
                     Audience = _configuration["Jwt:Audience"]
                 };
 

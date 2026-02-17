@@ -203,7 +203,7 @@ namespace SafetyWings.API
 
             // --- MIDDLEWARE ---
             app.UseCors("AllowAll"); // Сега името съвпада точно
-            if (app.Environment.IsEnvironment("Ngrok"))
+            if (Environment.GetEnvironmentVariable("USE_NGROK") == "true")
             {
                 // Tell .NET to accept the ngrok proxy headers
                 app.UseForwardedHeaders(new ForwardedHeadersOptions
