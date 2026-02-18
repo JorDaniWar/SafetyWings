@@ -41,7 +41,7 @@ namespace SafetyWings.API.Migrations
                     LastName = table.Column<string>(type:"nvarchar(30)", nullable: false),
                     PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UserRole = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DateCreated = table.Column<DateTime>(type: "datetime()", nullable: false)
+                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false)
                     
                     },
                 constraints: table =>
