@@ -1,6 +1,10 @@
 html, body {
     max-width: 100%;
     overflow-x: hidden; /* Забранява хоризонталния скрол на цялата страница */
+    background-color: #0b0e14;
+    margin-left: 0px;
+    margin-right: 0px;
+    scroll-behavior: smooth;
 }
 *{
     color: #00a8ff;
@@ -45,22 +49,13 @@ a::after {
     0% { transform: scaleX(1); transform-origin: bottom right; }
     100% { transform: scaleX(0); transform-origin: bottom right; }
 }
-/* a:hover{
-    text-decoration: underline;
-} */
 
-
-body{
-    background-color: #0b0e14;
-    margin-left: 0px;
-    margin-right: 0px;
-}
 .main-content{
     transform: translateX(-40px);
 }
 .header{
 
-    position: sticky;
+    position: fixed;
     top: 0;
     z-index: 1000; /* Гарантира, че хедърът ще е НАД всичко останало при скрол */
     background-color:#0b0e14;
@@ -87,6 +82,7 @@ body{
 }
 
 .dashboard-container {
+    padding-top: 80px;
     display: grid;
     grid-template-columns: 250px 1fr;
     height: 100vh;
@@ -94,7 +90,30 @@ body{
 
 
 section{
-    scroll-margin-top: 100px;
+scroll-margin-top: 100px
+}
+
+/* --- СЕКЦИЯ ДОБРЕ ДОШЛИ --- */
+.welcome-section {
+    background: rgba(0, 168, 255, 0.05); /* Много леко синьо */
+    border-left: 4px solid #00a8ff;
+    padding: 20px 30px;
+    border-radius: 8px;
+    margin-bottom: 30px; /* Отмества долните неща */
+    box-shadow: inset 0 0 10px rgba(0, 168, 255, 0.05);
+}
+
+.welcome-section h1 {
+    margin: 0;
+    color: #ffffff;
+    font-size: 26px;
+    font-weight: normal;
+}
+
+/* Акцент върху самото име */
+.welcome-section h1 .user-name {
+    color: #00a8ff;
+    font-weight: bold;
 }
 .stat-card {
     background: rgba(255, 255, 255, 0.05);
@@ -107,9 +126,10 @@ section{
 /* sidebar*/
 
 .sidebar {
-    width: 140px;
+    width: 150px;
+    height: 100%;
     border-right: 2px solid #00a8ff;
-
+    margin-top: 0;
 }
 .sidebar ul{
     list-style: none;
