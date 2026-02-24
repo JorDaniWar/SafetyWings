@@ -8,10 +8,11 @@
 </head>
 <body>
     <header class="header">
-        <button class="sidebar-button"></button>
+        <button class="sidebar-button" onclick="">☰</button>
         <a class="logo" href="dashboard.html">✈️ Safety Wings</a>
     </header>
     <div class="dashboard-container">
+        <div class="sidebar-overlay" id="sidebar-overlay"></div>
         <aside class="sidebar">  
             <nav class="sidebar-nav">
                 <div class="sidebar-header">
@@ -19,9 +20,9 @@
                 </div>
                 <ul>
                     <li><a href="#home">Начало</a></li>
-                    <li><a href="#last-flights">Последни</a></li>
-                    <li><a href="#">Телеметрия</a></li>
-                    <li><a href="#">Системи</a></li>
+                    <li><a href="#last-flights">Последни полети</a></li>
+                    <li><a href="#add-log">Добавяне на запис</a></li>
+                    <li><a href="#all-flights">Всички полети</a></li>
                 </ul>
                 <button type="button" class="logout-btn" onclick="logout()" 
                     id="logout-btn">Изход</button>
@@ -33,15 +34,56 @@
             </section>
             <section class="last-flights" id="last-flights">
                 <header class="status-bar">
-                <h1>Последни полети</h1>
-                <div id="cloud-status">📡 ВРЪЗКА: OFFLINE</div>
-                <section class="grid-stats">
-                <div class="stat-card">Височина: <span id="alt-val">0 m</span></div>
-                <div class="stat-card">Скорост: <span id="speed-val">0 km/h</span></div>
-                <div class="stat-card">Гориво: <span id="fuel-val">100%</span></div>
+                    <h1>Последни полети</h1>
+                </header> 
+                <div class="table-container">
+                    <table class="flights-table">
+                        <thead>
+                            <tr>
+                                <th>Статус</th>
+                                <th>Номер</th> 
+                                <th>Дата и час</th> 
+                            </tr>
+                        </thead>
+                        <tbody id="flights-data">
+                            <tr>
+                                <td colspan="10" style="text-align: center; color: white;">Зареждане на данни...    ⏳</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <a class="all" href="#all-flights"> Всички полети</a>
             </section>
-            </header>          
+            <section class="add-log" id="add-log">
+                <header class="all-logs-header">
+                    <h1>Добяване на запис</h1>
+                </header>
+                <section class="log-container">
+                    <div class="test">
+
+                    </div>
+                </section>
             </section>
+            <section class="all-flights" id="all-flights">
+                <header class="all-flights-header">
+                    <h1>Всички полети</h1>
+                </header> 
+                <section class="table-container">           
+                    <table class="flights-table">
+                        <thead>
+                            <tr>
+                                <th>Статус</th>
+                                <th>Номер</th>
+                                <th>Дата и час</th>
+                                <th>Пулс</th>
+                                <th>Кислородона сатурация</th>
+                                <th>Температура</th>
+                            </tr>
+                        </thead>
+                    </table>
+            </section>
+            </section>
+            
         </main>
     </div>
     <script src="js/dashboard.js?v=1.1"></script>

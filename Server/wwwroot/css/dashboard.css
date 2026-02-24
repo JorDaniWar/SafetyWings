@@ -13,23 +13,7 @@ html, body {
 }
 a {
     text-decoration: none;
-    position: relative;
-    display: inline-block;
-    color: #00a8ff;
-    padding-bottom: 5px;
 }
-
-a::after {
-    content: '';
-    position: absolute;
-    width: 100%;
-    height: 3px;
-    bottom: 0;
-    left: 0;
-    background-color: #00a8ff;
-    transform: scaleX(0); /* Скрита в началото */
-}
-
 /* Клас за влизане - задейства се при hover */
 .anim-in::after {
     animation: slideIn 0.5s forwards ease-in-out;
@@ -50,8 +34,15 @@ a::after {
     100% { transform: scaleX(0); transform-origin: bottom right; }
 }
 
-.main-content{
-    transform: translateX(-40px);
+.main-content {
+    padding: 20px;
+    width: 100%;
+    box-sizing: border-box;
+}
+.sidebar-button{
+    border: none;
+    font-size: 35px;
+    background: transparent;
 }
 .header{
 
@@ -82,10 +73,9 @@ a::after {
 }
 
 .dashboard-container {
-    padding-top: 80px;
-    display: grid;
-    grid-template-columns: 250px 1fr;
-    height: 100vh;
+    padding-top: 80px; /* Оставя място за хедъра */
+    display: block;    /* МАХАМЕ grid-а, за да не се бутат елементите */
+    width: 100%;
 }
 
 
@@ -124,39 +114,78 @@ scroll-margin-top: 100px
 }
 
 /* sidebar*/
-
+.sidebar-overlay {
+    position: fixed;
+    top: 80px; 
+    left: 0;
+    width: 100vw;
+    height: calc(100vh - 80px);
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 998; 
+    
+    /* Скрит по подразбиране */
+    opacity: 0;
+    visibility: hidden; 
+    transition: all 0.3s ease-in-out;
+}
+.sidebar-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
 .sidebar {
-    width: 150px;
-    height: 100%;
+    position: fixed; /* Откачаме го от страницата */
+    top: 80px; 
+    left: -250px; /* Скриваме го напълно извън екрана вляво */
+    width: 250px;
+    height: calc(100vh - 80px); 
+    background-color: #0b0e14;
     border-right: 2px solid #00a8ff;
-    margin-top: 0;
+    z-index: 999; /* Над тъмния фон */
+    
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 20px;
+    
+    /* Плавно плъзгане */
+    transition: left 0.3s ease-in-out;
 }
-.sidebar ul{
+.sidebar.active {
+    left: 0;
+    box-shadow: 5px 0 20px rgba(0,0,0,0.9);
+}
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 20px 15px;
+}
+.sidebar-nav ul {
     list-style: none;
-    padding-top: 0px;
-    margin-top: 0px;
-    margin-bottom: 0px;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Равномерно разстояние между линковете */
 }
-.sidebar button{
+.logout-btn {
+    margin-top: auto; /* Магията на Flexbox! */
     width: 100%;
-    padding-left: auto;
-    padding-right: auto;
     letter-spacing: 2px;
-    position: relative;
     font-size: 20px;
-    margin-top: 1rem;
     background-color: #0b0e14;
     color: red;
-    border-color: red;
+    border: 1px solid red;
     border-radius: 10px;   
     transition: all 0.4s ease;
     cursor: pointer;
     font-weight: bold;
+    padding: 10px 0;
 }
-.sidebar button:hover{
+
+.logout-btn:hover {
     color: #fff;
     background-color: red;
-    box-shadow: 0 0 10px 5px red;
+    box-shadow: 0 0 10px 5px rgba(255, 0, 0, 0.4);
 }
 .sidebar .sidebar-header{
     display: flex;
@@ -165,4 +194,114 @@ scroll-margin-top: 100px
     font-weight: bold;
     font-size: 20px;
 
+}
+.sidebar a {
+    text-decoration: none;
+    position: relative;
+    display: inline-block;
+    color: #00a8ff;
+    padding-bottom: 5px;
+}
+
+.sidebar a::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 3px;
+    bottom: 0;
+    left: 0;
+    background-color: #00a8ff;
+    transform: scaleX(0); /* Скрита в началото */
+}
+
+/* --- ТАБЛИЦА ЗА ПОЛЕТИ --- */
+
+.main-content a {
+    font-size: 25px;
+    font-weight: bold;
+    text-decoration: none;
+    position: relative;
+    justify-content: center;
+    display: inline-block;
+    margin-left: 43.5%;
+    color: #00a8ff;
+    padding-bottom: 5px;
+}
+
+.main-content a::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 3px;
+    bottom: 0;
+    left: 0;
+    background-color: #00a8ff;
+    transform: scaleX(0); /* Скрита в началото */
+}
+.table-container {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(0, 168, 255, 0.2);
+    border-radius: 8px;
+    padding: 15px;
+    margin-top: 20px;
+    overflow-x: auto; /* За да не се чупи на малки екрани */
+}
+
+.flights-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+.flights-table th {
+    color: #00a8ff;
+    padding: 12px 15px;
+    border-bottom: 2px solid rgba(0, 168, 255, 0.5);
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 14px;
+    letter-spacing: 1px;
+}
+
+.flights-table td {
+    padding: 12px 15px;
+    color: #e0e0e0; /* Светло сиво, за да се чете лесно на тъмния фон */
+    border-bottom: 1px solid rgba(0, 168, 255, 0.1);
+}
+
+/* Ефект при минаване с мишката върху ред */
+.flights-table tbody tr:hover {
+    background: rgba(0, 168, 255, 0.05);
+    transition: all 0.3s ease;
+
+}
+
+/* Стилизиране на статуса */
+.status-ok { color: #2ecc71; font-weight: bold; } /* Зелено за успех */
+.status-warn { color: #f1c40f; font-weight: bold; } /* Жълто за предупреждение */
+.status-err { color: #e74c3c; font-weight: bold; } /* Червено за грешка */
+
+
+.test{
+    width: 100%;
+    height: 500px;
+    background-color: #2ecc71;
+}
+
+/* --- АДАПТИВНОСТ ЗА МОБИЛНИ (ПОД 768px) --- */
+@media (max-width: 768px) {
+    .dashboard-container {
+        grid-template-columns: 1fr; /* Само една колона на малък екран */
+    }
+    
+    .sidebar {
+        position: fixed; /* Откачаме го от грида */
+        left: -250px; /* Скриваме го извън екрана вляво */
+        width: 220px;
+    }
+    
+    .sidebar.active {
+        left: 0; /* Класът, който JS добавя, за да го покаже */
+        box-shadow: 5px 0 15px rgba(0,0,0,0.7);
+    }
 }
