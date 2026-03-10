@@ -27,20 +27,26 @@ namespace SafetyWings.API.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterForm model)
         {
-            // 1. Проверяваме дали такъв потребител вече съществува
+            // 1. Проверка дали заявката изобщо съдържа данни (дали фронтендът не е пратил празен обект)
             if (model == null)
             {
-                // Връщаме 400 или 409, защото заявката е невалидна (потребителят вече е там)
-                return BadRequest("Потребителят вече съществува.");
+                return BadRequest("Невалидни данни от формата.");
             }
+
+            // 2. Търсим дали потребител с това име вече съществува
             var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Username == model.Username);
-
             
+            // ТУК Е РАЗЛИКАТА: Ако existingUser НЕ е null, значи такъв човек вече има!
+            if (existingUser != null)
+            {
+                // Връщаме 409 Conflict - стандартен код, когато записът вече съществува
+                return Conflict(new { message = "Потребител с това потребителско име вече съществува." }); 
+            }
 
-            // 2. Хешираме паролата (НИКОГА не пази чист текст!)
+            // 3. Хешираме паролата (НИКОГА не пази чист текст!)
             string hashedPassword = BCrypt.Net.BCrypt.HashPassword(model.Password);
 
-            // 3. Създаваме новия обект за базата данни
+            // 4. Създаваме новия обект за базата данни
             var newUser = new User
             {
                 Username = model.Username,
@@ -49,10 +55,11 @@ namespace SafetyWings.API.Controllers
                 LastName = model.LastName
             };
 
-            // 4. Запазваме в базата
+            // 5. Запазваме в базата
             _context.Users.Add(newUser);
             await _context.SaveChangesAsync();
 
+            // Връщаме 200 OK
             return Ok(new { message = "Регистрацията е успешна!" });
         }
 
@@ -69,10 +76,11 @@ namespace SafetyWings.API.Controllers
          [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginForm model) // ТУК се използва LoginForm!
         {
+            if (model == null) return BadRequest("Данните липсват");
             // 1. Търсим потребителя в базата по име
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == model.Username);
 
-            if (model == null) return BadRequest("Данните липсват");
+            
                 if (user == null) return Unauthorized("Грешно потребителско име или парола.");
 
                 // 2. Проверяваме дали паролата съвпада (ползваме BCrypt!)
@@ -91,8 +99,8 @@ namespace SafetyWings.API.Controllers
                     {
                 new Claim(ClaimTypes.Name, user.Username),
                 new Claim("UserId", user.UserID.ToString())
-        }),
-                    Expires = DateTime.UtcNow.AddDays(7), // Токенът важи 1 минута
+                    }),
+                    Expires = DateTime.UtcNow.AddDays(7), // Токенът важи 7 дни
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
                     Issuer = _configuration["Jwt:Issuer"],  
                     Audience = _configuration["Jwt:Audience"]
