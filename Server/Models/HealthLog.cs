@@ -16,4 +16,9 @@ public class HealthLog
     public string Temperature { get; set; } = string.Empty;
     public string StressIndex { get; set; } = string.Empty;
     public DateTime Timestamp { get; set; } = DateTime.Now;
+
+    // НОВО: Външен ключ (Foreign Key) - ID-то на пилота/потребителя
+
+    // НОВО: Навигационно свойство - сочи към конкретния потребител
+    public User User { get; set; }
 }

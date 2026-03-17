@@ -58,7 +58,9 @@ namespace SafetyWings.API.Migrations
 
                     b.HasKey("LogID");
 
-                    b.ToTable("HealthLogs", (string)null);
+                    b.HasIndex("UserID");
+
+                    b.ToTable("HealthLogs");
                 });
 
             modelBuilder.Entity("SafetyWings.API.Models.User", b =>
@@ -68,6 +70,17 @@ namespace SafetyWings.API.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserID"));
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PasswordHash")
                         .IsRequired()
@@ -83,7 +96,23 @@ namespace SafetyWings.API.Migrations
 
                     b.HasKey("UserID");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("SafetyWings.API.Models.HealthLog", b =>
+                {
+                    b.HasOne("SafetyWings.API.Models.User", "User")
+                        .WithMany("HealthLosg")
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("SafetyWings.API.Models.User", b =>
+                {
+                    b.Navigation("HealthLosg");
                 });
 #pragma warning restore 612, 618
         }

@@ -24,5 +24,8 @@ namespace SafetyWings.API.Models
         public string UserRole { get; set; } = "Pilot"; // По подразбиране
 
         public DateTime DateCreated { get; set; } = DateTime.Now;
+
+        // НОВО: Навигационно свойство към полетите
+        public ICollection<HealthLog> HealthLosg { get; set; } = new List<HealthLog>();
     }
 }

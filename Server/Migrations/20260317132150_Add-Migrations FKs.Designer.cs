@@ -12,8 +12,8 @@ using SafetyWings.API.Data;
 namespace SafetyWings.API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260201180927_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20260317132150_Add-Migrations FKs")]
+    partial class AddMigrationsFKs
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -61,6 +61,8 @@ namespace SafetyWings.API.Migrations
 
                     b.HasKey("LogID");
 
+                    b.HasIndex("UserID");
+
                     b.ToTable("HealthLogs");
                 });
 
@@ -71,6 +73,17 @@ namespace SafetyWings.API.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserID"));
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PasswordHash")
                         .IsRequired()
@@ -87,6 +100,22 @@ namespace SafetyWings.API.Migrations
                     b.HasKey("UserID");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("SafetyWings.API.Models.HealthLog", b =>
+                {
+                    b.HasOne("SafetyWings.API.Models.User", "User")
+                        .WithMany("HealthLosg")
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("SafetyWings.API.Models.User", b =>
+                {
+                    b.Navigation("HealthLosg");
                 });
 #pragma warning restore 612, 618
         }
