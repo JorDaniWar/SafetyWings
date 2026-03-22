@@ -25,11 +25,11 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     }
-
+    
     // ==========================================
     // 2. ЗАРЕЖДАНЕ НА ИСТОРИЯТА (Последни полети)
     // ==========================================
-    loadHistory(); // Извикваме функцията веднага при отваряне на страницата
+    loadHistory(); 
 
     // ==========================================
     // 3. ДОБАВЯНЕ НА НОВ ЗАПИС (POST Заявка)
@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (addLogForm) {
         addLogForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            console.log("СУПЕР! Бутонът работи и формата е хваната!");
+            console.log("СУПЕР! Формата се изпраща!");
 
             const token = localStorage.getItem('token');
             if (!token) {
@@ -48,36 +48,57 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            // 1. Намираме всички полета едно по едно
-            // 1. Намираме елементите
+            // 1. Намираме елементите (Оправено: cortisol с малко 'c')
             const flightInput = document.getElementById('flightNumber');
             const pulseInput = document.getElementById('pulse');
             const oxygenInput = document.getElementById('oxygen');
             const tempInput = document.getElementById('temperature');
-            const cortInput = document.getElementById('Cortisol');
+            const cortInput = document.getElementById('cortisol'); 
 
-            // 2. БРОНИРАНАТА ПРОВЕРКА: Ако някое липсва, вади голям прозорец (alert)!
-            if (!flightInput) { alert("Грешка: Не намирам поле с id='flightNumber'"); return; }
-            if (!pulseInput) { alert("Грешка: Не намирам поле с id='pulse'"); return; }
-            if (!oxygenInput) { alert("Грешка: Не намирам поле с id='oxygen'"); return; }
-            if (!tempInput) { alert("Грешка: Не намирам поле с id='temperature'"); return; }
-            if (!cortInput) { alert("Грешка: Не намирам поле с id='Cortisol'"); return; }
+            // 2. Проверка за липсващи полета
+            if (!flightInput || !pulseInput || !oxygenInput || !tempInput || !cortInput) { 
+                alert("Грешка: Липсва поле в HTML-а!"); 
+                return; 
+            }
 
-            // 3. Ако всичко е намерено, чак тогава четем стойностите
+            // 3. Опаковаме данните с точните имена, които C# очаква, като ТЕКСТ (string)
             const logData = {
-                flightNumber: flightInput.value.trim(),
-                pulse: parseInt(pulseInput.value, 10),
-                oxygenSaturation: parseInt(oxygenInput.value, 10),
-                temperature: parseFloat(tempInput.value),
-                cortisol: parseFloat(cortInput.value)
+                flightID: flightInput.value.trim(),
+                heartRate: pulseInput.value.trim(),
+                oxygenLevel: oxygenInput.value.trim(),
+                temperature: tempInput.value.trim(),
+                stressIndex: cortInput.value.trim()
             };
+
+            // 4. ИЗПРАЩАМЕ КЪМ C# (Това липсваше!)
+            try {
+                const response = await fetch('/api/Health/log', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(logData)
+                });
+
+                if (response.ok) {
+                    showMessage("Успешен запис на полета! 🚀", "success");
+                    addLogForm.reset(); // Изчистваме полетата
+                    loadHistory();      // Зареждаме таблицата наново
+                } else {
+                    showMessage("Грешка при запис! Статус: " + response.status, "error");
+                }
+            } catch (error) {
+                console.error("Мрежова грешка:", error);
+                showMessage("Сървърът не отговаря.", "error");
+            }
         });
     }
 
     function showMessage(text, type) {
         if (!formMessage) return;
         formMessage.textContent = text;
-        formMessage.style.color = type === 'success' ? '#4CAF50' : (type === 'error' ? '#f44336' : '#ff9800');
+        formMessage.style.color = type === 'success' ? '#4CAF50' : '#f44336';
         setTimeout(() => formMessage.textContent = "", 5000);
     }
 });
@@ -105,10 +126,10 @@ async function loadHistory() {
 }
 
 function renderTable(logs) {
-    const tableBody = document.getElementById('flights-data'); // ID-то от твоя HTML
+    const tableBody = document.getElementById('flights-data'); 
     if (!tableBody) return;
 
-    tableBody.innerHTML = ''; // Изчистваме надписа "Зареждане на данни... ⏳"
+    tableBody.innerHTML = ''; 
 
     if (logs.length === 0) {
         tableBody.innerHTML = '<tr><td colspan="3" style="text-align: center;">Няма намерени полети.</td></tr>';
@@ -118,13 +139,12 @@ function renderTable(logs) {
     logs.forEach(log => {
         const row = document.createElement('tr');
         
-        // Съобразяваме се с 3-те колони от твоя HTML: Статус, Номер, Дата
-        // Ако C# моделът ти няма "Date", сложихме Date.now() като резерва
-        const dateString = log.date ? new Date(log.date).toLocaleString('bg-BG') : new Date().toLocaleDateString('bg-BG');
+        // C# връща 'timestamp', а не 'date'
+        const dateString = log.timestamp ? new Date(log.timestamp).toLocaleString('bg-BG') : '-';
 
         row.innerHTML = `
             <td style="text-align:center;">✅</td>
-            <td>${log.flightNumber || '-'}</td>
+            <td>${log.flightID || '-'}</td>
             <td>${dateString}</td>
         `;
         tableBody.appendChild(row);
@@ -132,7 +152,7 @@ function renderTable(logs) {
 }
 
 // ==========================================
-// 5. ИЗХОД И АНИМАЦИИ (Остават непокътнати)
+// 5. ИЗХОД И АНИМАЦИИ
 // ==========================================
 function logout(){
     localStorage.removeItem('token');
