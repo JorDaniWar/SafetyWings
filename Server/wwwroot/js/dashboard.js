@@ -40,6 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (addLogForm) {
         addLogForm.addEventListener('submit', async (e) => {
             e.preventDefault();
+            console.log("СУПЕР! Бутонът работи и формата е хваната!");
 
             const token = localStorage.getItem('token');
             if (!token) {
@@ -47,41 +48,29 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            // Взимаме данните по ТОЧНИТЕ ID-та от твоя HTML
+            // 1. Намираме всички полета едно по едно
+            // 1. Намираме елементите
+            const flightInput = document.getElementById('flightNumber');
+            const pulseInput = document.getElementById('pulse');
+            const oxygenInput = document.getElementById('oxygen');
+            const tempInput = document.getElementById('temperature');
+            const cortInput = document.getElementById('Cortisol');
+
+            // 2. БРОНИРАНАТА ПРОВЕРКА: Ако някое липсва, вади голям прозорец (alert)!
+            if (!flightInput) { alert("Грешка: Не намирам поле с id='flightNumber'"); return; }
+            if (!pulseInput) { alert("Грешка: Не намирам поле с id='pulse'"); return; }
+            if (!oxygenInput) { alert("Грешка: Не намирам поле с id='oxygen'"); return; }
+            if (!tempInput) { alert("Грешка: Не намирам поле с id='temperature'"); return; }
+            if (!cortInput) { alert("Грешка: Не намирам поле с id='Cortisol'"); return; }
+
+            // 3. Ако всичко е намерено, чак тогава четем стойностите
             const logData = {
-                flightNumber: document.getElementById('flightNumber').value.trim(),
-                pulse: parseInt(document.getElementById('pulse').value, 10),
-                oxygenSaturation: parseInt(document.getElementById('oxygen').value, 10),
-                temperature: parseFloat(document.getElementById('temperature').value),
-                cortisol: parseFloat(document.getElementById('Cortisol').value) // ТУК Е ГЛАВНО "C"!
+                flightNumber: flightInput.value.trim(),
+                pulse: parseInt(pulseInput.value, 10),
+                oxygenSaturation: parseInt(oxygenInput.value, 10),
+                temperature: parseFloat(tempInput.value),
+                cortisol: parseFloat(cortInput.value)
             };
-
-            try {
-                showMessage("Записване...", "warning");
-                
-                // Смени порта, ако твоят е различен от 5001!
-                const response = await fetch('/api/Health/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    },
-                    body: JSON.stringify(logData)
-                });
-
-                if (response.ok) {
-                    showMessage("Записът е добавен успешно! ✈️", "success");
-                    addLogForm.reset();
-                    
-                    // Презареждаме таблицата с полети, за да се покаже новият веднага!
-                    loadHistory(); 
-                } else {
-                    showMessage("Възникна грешка при записването.", "error");
-                }
-            } catch (error) {
-                console.error("Грешка:", error);
-                showMessage("Сървърът не отговаря.", "error");
-            }
         });
     }
 
