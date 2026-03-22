@@ -43,7 +43,7 @@ namespace SafetyWings.API.Controllers
             return Ok(new { message = "Данните са криптирани и записани успешно." });
         }
 
-        [HttpGet("history/")]
+        [HttpGet("history")]
         public async Task<IActionResult> GetHistory()
         {
             var UserIdClaim = User.FindFirst("UserId")?.Value;
