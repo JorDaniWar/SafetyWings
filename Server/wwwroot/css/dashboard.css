@@ -128,7 +128,7 @@ section{
 .sidebar {
     position: fixed; /* Откачаме го от страницата */
     top: 80px; 
-    left: -250px; /* Скриваме го напълно извън екрана вляво */
+    left: -252px; /* Скриваме го напълно извън екрана вляво */
     width: 250px;
     height: calc(100vh - 80px); 
     background-color: #0b0e14;
