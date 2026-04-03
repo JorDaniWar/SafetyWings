@@ -54,6 +54,7 @@ namespace SafetyWings.API.Controllers
             var logs = await _context.HealthLogs
                 .Where(l => l.UserID == pilotId)
                 .OrderBy(l => l.Timestamp)
+                .Take(10)
                 .ToListAsync();
 
             if (logs == null || !logs.Any())
@@ -65,11 +66,15 @@ namespace SafetyWings.API.Controllers
             var decryptedHistory = logs.Select(l => new
             {
                 l.Timestamp,
+                l.FlightID,
                 // Използваме твоя метод Decrypt. Ако данните в базата не са криптирани правилно, 
                 // тук може да гръмне, затова добавяме проверка.
                 HeartRate = _encryptionService.Decrypt(l.HeartRate),
                 Temperature = _encryptionService.Decrypt(l.Temperature),
-                OxygenLevel = _encryptionService.Decrypt(l.OxygenLevel)
+                OxygenLevel = _encryptionService.Decrypt(l.OxygenLevel),
+                StressIndex = _encryptionService.Decrypt(l.StressIndex)
+                
+                
             }).OrderBy(l => l.Timestamp); // Подреждаме ги от най-стария към най-новия за графиката
 
             return Ok(decryptedHistory);
@@ -135,6 +140,42 @@ namespace SafetyWings.API.Controllers
                 LastChecked = DateTime.Now
             });
         }
-        
+        [HttpGet("all")]
+        public async Task<IActionResult> GetAll()
+        {
+            var UserIdClaim = User.FindFirst("UserId")?.Value;
+            if (string.IsNullOrEmpty(UserIdClaim)) return Unauthorized();
+            int pilotId = int.Parse(UserIdClaim);
+
+            // 1. Взимаме последните 20 записа от базата за конкретния пилот
+            var logs = await _context.HealthLogs
+                .Where(l => l.UserID == pilotId)
+                .OrderBy(l => l.Timestamp)
+                .ToListAsync();
+
+            if (logs == null || !logs.Any())
+            {
+                return Ok(new List<object>()); // Връщаме празен списък, ако няма данни
+            }
+
+            // 2. Декриптираме данните, преди да ги пратим към браузъра/телефона
+            var decryptedHistory = logs.Select(l => new
+            {
+                l.Timestamp,
+                l.FlightID,
+                // Използваме твоя метод Decrypt. Ако данните в базата не са криптирани правилно, 
+                // тук може да гръмне, затова добавяме проверка.
+                HeartRate = _encryptionService.Decrypt(l.HeartRate),
+                Temperature = _encryptionService.Decrypt(l.Temperature),
+                OxygenLevel = _encryptionService.Decrypt(l.OxygenLevel),
+                StressIndex = _encryptionService.Decrypt(l.StressIndex)
+
+
+            }).OrderBy(l => l.Timestamp); // Подреждаме ги от най-стария към най-новия за графиката
+
+            return Ok(decryptedHistory);
+        }
     }
+
+
 }

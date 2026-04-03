@@ -129,6 +129,7 @@ function renderTable(logs) {
     const tableBody = document.getElementById('flights-data'); 
     if (!tableBody) return;
 
+    console.log("Ето това пристигна от C#:", logs); // <--- ДОБАВИ ТОЗИ РЕД
     tableBody.innerHTML = ''; 
 
     if (logs.length === 0) {
@@ -141,10 +142,11 @@ function renderTable(logs) {
         
         // C# връща 'timestamp', а не 'date'
         const dateString = log.timestamp ? new Date(log.timestamp).toLocaleString('bg-BG') : '-';
+        const flightDisplay = log.flightID || log.flightId || log.FlightID || '-';
 
         row.innerHTML = `
             <td style="text-align:center;">✅</td>
-            <td>${log.flightID || '-'}</td>
+            <td>${flightDisplay || '-'}</td>
             <td>${dateString}</td>
         `;
         tableBody.appendChild(row);

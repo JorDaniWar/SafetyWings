@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace SafetyWings.API.Models;
 public class HealthLog
@@ -9,16 +10,15 @@ public class HealthLog
     [Required]
     public int UserID { get; set; }
 
-    public string FlightID { get; set; } = string.Empty; // Добави това тук
-
+    public string FlightID { get; set; } = string.Empty;
     public string HeartRate { get; set; } = string.Empty;
     public string OxygenLevel { get; set; } = string.Empty;
     public string Temperature { get; set; } = string.Empty;
     public string StressIndex { get; set; } = string.Empty;
-    public DateTime Timestamp { get; set; } = DateTime.Now;
+    
 
-    // НОВО: Външен ключ (Foreign Key) - ID-то на пилота/потребителя
+     public DateTime Timestamp { get; set; } = DateTime.Now;
 
-    // НОВО: Навигационно свойство - сочи към конкретния потребител
-    public User User { get; set; }
+    [JsonIgnore] // Това обърква ASP.NET, когато се опитва да чете от фронтенда
+    public User? User { get; set; }
 }
