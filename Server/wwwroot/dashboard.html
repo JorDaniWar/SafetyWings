@@ -23,6 +23,7 @@
                     <li><a href="#last-flights">Последни полети</a></li>
                     <li><a href="#add-log">Добавяне на запис</a></li>
                     <li><a href="#all-flights">Всички полети</a></li>
+                    <li><a href="simulation.html">Симулация на данни</a></li>
                 </ul>
                 <button type="button" class="logout-btn" onclick="logout()" 
                     id="logout-btn">Изход</button>
@@ -43,6 +44,7 @@
                                 <th>Статус</th>
                                 <th>Номер</th> 
                                 <th>Дата и час</th> 
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody id="flights-data">
@@ -102,12 +104,17 @@
                             <tr>
                                 <th>Статус</th>
                                 <th>Номер</th>
-                                <th>Дата и час</th>
                                 <th>Пулс</th>
                                 <th>Кислородона сатурация</th>
                                 <th>Температура</th>
+                                <th>Дата и час</th>
                             </tr>
                         </thead>
+                        <tbody id="flights-data-all">
+                            <tr>
+                                <td colspan="10" style="text-align: center; color: white;">Зареждане на данни...    ⏳</td>
+                            </tr>
+                        </tbody>
                     </table>
             </section>
             </section>

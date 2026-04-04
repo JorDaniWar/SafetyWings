@@ -188,6 +188,8 @@ section{
     font-size: 20px;
 }
 .sidebar a {
+    font-size: 20px;
+    font-weight: bold;
     text-decoration: none;
     position: relative;
     display: inline-block;
@@ -246,6 +248,13 @@ section{
     border-collapse: collapse;
     text-align: center;
 }
+.flights-table button {
+    background-color: transparent;
+    border: none;
+    color: #00a8ff;
+    cursor: pointer;
+    font-size: 18px;
+}
 
 .flights-table th {
     color: #00a8ff;
@@ -267,6 +276,11 @@ section{
 .flights-table tbody tr:hover {
     background: rgba(0, 168, 255, 0.05);
     transition: all 0.3s ease;
+}
+
+.highlighted-row {
+    background-color: #ffeeba !important; /* Жълтеникав цвят, смени го по твой вкус */
+    transition: background-color 0.5s ease; /* Плавно преливане */
 }
 
 /* Стилизиране на статуса */

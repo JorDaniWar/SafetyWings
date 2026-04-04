@@ -1,7 +1,13 @@
-document.addEventListener('DOMContentLoaded', () => {
-    // ==========================================
+const token = localStorage.getItem('token');
+if (!token) {
+    alert("Грешка: Не сте влезли в профила си! Ще бъдете пренасочени към началната страница.");
+    window.location.href = 'index.html';
+}
+// ==========================================
     // 1. САЙДБАР И НАВИГАЦИЯ
     // ==========================================
+document.addEventListener('DOMContentLoaded', () => {
+    
     const sidebarBtn = document.querySelector('.sidebar-button');
     const sidebar = document.querySelector('.sidebar');
     const overlay = document.querySelector('.sidebar-overlay');
@@ -30,6 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 2. ЗАРЕЖДАНЕ НА ИСТОРИЯТА (Последни полети)
     // ==========================================
     loadHistory(); 
+    loadAllLogs();
 
     // ==========================================
     // 3. ДОБАВЯНЕ НА НОВ ЗАПИС (POST Заявка)
@@ -40,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (addLogForm) {
         addLogForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            console.log("СУПЕР! Формата се изпраща!");
+            console.log("Формата се изпраща!");
 
             const token = localStorage.getItem('token');
             if (!token) {
@@ -57,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // 2. Проверка за липсващи полета
             if (!flightInput || !pulseInput || !oxygenInput || !tempInput || !cortInput) { 
-                alert("Грешка: Липсва поле в HTML-а!"); 
+                alert("Грешка: Липсва поле при записа!"); 
                 return; 
             }
 
@@ -85,6 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     showMessage("Успешен запис на полета! 🚀", "success");
                     addLogForm.reset(); // Изчистваме полетата
                     loadHistory();      // Зареждаме таблицата наново
+                    loadAllLogs();     // Зареждаме и всички записи наново
                 } else {
                     showMessage("Грешка при запис! Статус: " + response.status, "error");
                 }
@@ -107,7 +115,6 @@ document.addEventListener('DOMContentLoaded', () => {
 // 4. ФУНКЦИИ ЗА ИЗТЕГЛЯНЕ И РИСУВАНЕ НА ТАБЛИЦАТА
 // ==========================================
 async function loadHistory() {
-    const token = localStorage.getItem('token');
     if (!token) return;
 
     try {
@@ -117,27 +124,47 @@ async function loadHistory() {
         });
 
         if (response.ok) {
-            const logs = await response.json();
-            renderTable(logs);
+            const historylogs = await response.json();
+            renderHistoryTable(historylogs);
         }
     } catch (error) {
         console.error("Грешка при изтегляне на историята:", error);
     }
 }
+async function loadAllLogs() {
+    if (!token) {
+        alert("Грешка: Не сте влезли в профила си! Ще бъдете пренасочени към началната страница.");
+        window.location.href = 'index.html';
+        return;
+    }
 
-function renderTable(logs) {
+    try {
+        const response = await fetch('/api/Health/all', {
+            method: 'GET',
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (response.ok) {
+            const allLogs = await response.json();
+            renderAllLogsTable(allLogs);
+        }
+    } catch (error) {
+        console.error("Грешка при изтегляне на всички записи:", error);
+    }
+}
+function renderHistoryTable(historylogs) {
     const tableBody = document.getElementById('flights-data'); 
     if (!tableBody) return;
 
-    console.log("Ето това пристигна от C#:", logs); // <--- ДОБАВИ ТОЗИ РЕД
+    console.log("Списък с историята:", historylogs); // <--- ДОБАВИ ТОЗИ РЕД
     tableBody.innerHTML = ''; 
 
-    if (logs.length === 0) {
+    if (historylogs.length === 0) {
         tableBody.innerHTML = '<tr><td colspan="3" style="text-align: center;">Няма намерени полети.</td></tr>';
         return;
     }
 
-    logs.forEach(log => {
+    historylogs.forEach(log => {
         const row = document.createElement('tr');
         
         // C# връща 'timestamp', а не 'date'
@@ -148,9 +175,61 @@ function renderTable(logs) {
             <td style="text-align:center;">✅</td>
             <td>${flightDisplay || '-'}</td>
             <td>${dateString}</td>
+            <button onclick="scrollToLog(${log.logID})" class="flights-table button">
+                🔍 Детайли
+            </button>
         `;
+        const actionTd = document.createElement('td');
+        const detailsBtn = document.createElement('button');
         tableBody.appendChild(row);
     });
+}
+function renderAllLogsTable(allLogs) {
+    const tableBody = document.getElementById('flights-data-all'); 
+    if (!tableBody) return;
+    if (historylogs.length === 0) {
+        tableBody.innerHTML = '<tr><td colspan="3" style="text-align: center;">Няма намерени полети.</td></tr>';
+        return;
+    }
+        const dateString = log.timestamp ? new Date(log.timestamp).toLocaleString('bg-BG') : '-';
+        const flightID = log.flightID || log.flightId || log.FlightID || '-';
+        const pulse = log.heartRate || log.pulse || log.HeartRate || '-';
+        const oxygen = log.oxygenLevel || log.oxygen || log.OxygenLevel || '-';
+        const temp = log.temperature || log.temp || log.Temperature || '-';
+        const cort = log.stressIndex || log.cortisol || log.StressIndex || '-';
+
+        row.innerHTML = `
+            <td style="text-align:center;">✅</td>
+            <td>${flightID || '-'}</td>
+            <td>${dateString}</td>
+            <td>${pulse}</td>
+            <td>${oxygen}</td>
+            <td>${temp}</td>
+            <td>${cort}</td>
+        `;
+        tableBody.appendChild(row);
+
+}
+function scrollToLog(logID) {
+   const targetRow = document.getElementById(`log-row-${logId}`);
+    
+    if (targetRow) {
+        // 2. Плъзгаме екрана плавно до него
+        targetRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        
+        // 3. Махаме маркировката от всички други редове (ако сме кликали преди това)
+        document.querySelectorAll('.highlighted-row').forEach(r => r.classList.remove('highlighted-row'));
+        
+        // 4. Слагаме цвета на нашия ред
+        targetRow.classList.add('highlighted-row');
+        
+        // По желание: махаме цвета след 3 секунди (избледнява)
+        setTimeout(() => {
+            targetRow.classList.remove('highlighted-row');
+        }, 3000);
+    } else {
+        console.warn("Редът не е намерен! ID:", logID);
+    }
 }
 
 // ==========================================
@@ -195,4 +274,4 @@ document.querySelectorAll('a').forEach(link => {
             link.classList.remove('anim-out'); 
         }, 500);
     }
-});
+    });
