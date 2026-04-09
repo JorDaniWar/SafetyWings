@@ -65,7 +65,9 @@ namespace SafetyWings.API.Controllers
             // 2. Декриптираме данните, преди да ги пратим към браузъра/телефона
             var decryptedHistory = logs.Select(l => new
             {
+                l.LogID,
                 l.Timestamp,
+
                 l.FlightID,
                 // Използваме твоя метод Decrypt. Ако данните в базата не са криптирани правилно, 
                 // тук може да гръмне, затова добавяме проверка.
@@ -161,6 +163,7 @@ namespace SafetyWings.API.Controllers
             // 2. Декриптираме данните, преди да ги пратим към браузъра/телефона
             var decryptedHistory = logs.Select(l => new
             {
+                l.LogID,
                 l.Timestamp,
                 l.FlightID,
                 // Използваме твоя метод Decrypt. Ако данните в базата не са криптирани правилно, 
