@@ -156,41 +156,57 @@ function renderHistoryTable(historylogs) {
     const tableBody = document.getElementById('flights-data'); 
     if (!tableBody) return;
 
-    console.log("Списък с историята:", historylogs); // <--- ДОБАВИ ТОЗИ РЕД
     tableBody.innerHTML = ''; 
 
     if (historylogs.length === 0) {
-        tableBody.innerHTML = '<tr><td colspan="3" style="text-align: center;">Няма намерени полети.</td></tr>';
+        // Променихме colspan на 4, защото имаме 4 колони
+        tableBody.innerHTML = '<tr><td colspan="4" style="text-align: center;">Няма намерени полети.</td></tr>';
         return;
     }
 
     historylogs.forEach(log => {
         const row = document.createElement('tr');
         
-        // C# връща 'timestamp', а не 'date'
         const dateString = log.timestamp ? new Date(log.timestamp).toLocaleString('bg-BG') : '-';
         const flightDisplay = log.flightID || log.flightId || log.FlightID || '-';
+        
+        // Гарантираме, че вземаме правилното ID
+        const currentLogID = log.logID || log.logId;
 
+        // БУТОНЪТ вече е правилно прибран в свое собствено <td>
         row.innerHTML = `
             <td style="text-align:center;">✅</td>
-            <td>${flightDisplay || '-'}</td>
+            <td>${flightDisplay}</td>
             <td>${dateString}</td>
-            <button onclick="scrollToLog(${log.logID})" class="flights-table button">
-                🔍 Детайли
-            </button>
+            <td style="text-align:center;">
+                <button onclick="scrollToLog(${currentLogID})" class="flights-table button" style="cursor: pointer;">
+                    🔍 Детайли
+                </button>
+            </td>
         `;
-        const actionTd = document.createElement('td');
-        const detailsBtn = document.createElement('button');
         tableBody.appendChild(row);
     });
 }
 function renderAllLogsTable(allLogs) {
     const tableBody = document.getElementById('flights-data-all'); 
     if (!tableBody) return;
-    if (historylogs.length === 0) {
-        tableBody.innerHTML = '<tr><td colspan="3" style="text-align: center;">Няма намерени полети.</td></tr>';
+    
+    tableBody.innerHTML = ''; // Изчистваме таблицата преди да я напълним
+
+    // ОПРАВЕНО: Проверяваме allLogs, а не historylogs
+    if (allLogs.length === 0) {
+        tableBody.innerHTML = '<tr><td colspan="7" style="text-align: center;">Няма намерени полети.</td></tr>';
         return;
     }
+
+    // ОПРАВЕНО: ДОБАВЕН Е ЛИПСВАЩИЯТ ЦИКЪЛ!
+    allLogs.forEach(log => {
+        const row = document.createElement('tr');
+        
+        // МАГИЯТА: Закачаме уникално ID на всеки ред, за да го намира бутонът горе!
+        const currentLogID = log.logID || log.logId;
+        row.id = `log-row-${currentLogID}`; 
+
         const dateString = log.timestamp ? new Date(log.timestamp).toLocaleString('bg-BG') : '-';
         const flightID = log.flightID || log.flightId || log.FlightID || '-';
         const pulse = log.heartRate || log.pulse || log.HeartRate || '-';
@@ -200,7 +216,7 @@ function renderAllLogsTable(allLogs) {
 
         row.innerHTML = `
             <td style="text-align:center;">✅</td>
-            <td>${flightID || '-'}</td>
+            <td>${flightID}</td>
             <td>${dateString}</td>
             <td>${pulse}</td>
             <td>${oxygen}</td>
@@ -208,22 +224,23 @@ function renderAllLogsTable(allLogs) {
             <td>${cort}</td>
         `;
         tableBody.appendChild(row);
-
+    });
 }
 function scrollToLog(logID) {
-   const targetRow = document.getElementById(`log-row-${logId}`);
+    // ОПРАВЕНО: Използваме logID (с главно D), за да съвпада с параметъра горе
+    const targetRow = document.getElementById(`log-row-${logID}`);
     
     if (targetRow) {
-        // 2. Плъзгаме екрана плавно до него
+        // Плъзгаме екрана плавно до него
         targetRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
         
-        // 3. Махаме маркировката от всички други редове (ако сме кликали преди това)
+        // Махаме маркировката от всички други редове
         document.querySelectorAll('.highlighted-row').forEach(r => r.classList.remove('highlighted-row'));
         
-        // 4. Слагаме цвета на нашия ред
+        // Слагаме цвета на нашия ред
         targetRow.classList.add('highlighted-row');
         
-        // По желание: махаме цвета след 3 секунди (избледнява)
+        // Махаме цвета след 3 секунди
         setTimeout(() => {
             targetRow.classList.remove('highlighted-row');
         }, 3000);
