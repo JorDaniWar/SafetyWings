@@ -1,4 +1,10 @@
 const token = localStorage.getItem('token');
+let healthChart = null;
+let allFetchedLogs = [];
+let showDataLabels = true; // По подразбиране числата ще се виждат
+
+// Регистрираме плъгина глобално
+Chart.register(ChartDataLabels);
 if (!token) {
     alert("Грешка: Не сте влезли в профила си! Ще бъдете пренасочени към началната страница.");
     window.location.href = 'index.html';
@@ -156,14 +162,14 @@ async function loadAllLogs() {
                 welcomeElement.textContent = `${data.firstName} ${data.lastName}`;
             }
 
-            // 2. ПОДАВАМЕ САМО ЛОГОВЕТЕ КЪМ ТАБЛИЦАТА
-            // Използваме data.logs, а не целия обект
-            if (data.logs) {
-                renderAllLogsTable(data.logs);
-            } else {
-                // Застраховка, ако случайно няма логове
-                renderAllLogsTable([]);
-            }
+            // 2. ЗАПАЗВАМЕ ЛОГОВЕТЕ В ГЛОБАЛНАТА ПРОМЕНЛИВА
+            allFetchedLogs = data.logs || [];
+
+            // 3. Рендираме таблицата (както досега)
+            renderAllLogsTable(allFetchedLogs);
+
+            // 4. ПУСКАМЕ ГРАФИКАТА С ПЪРВОНАЧАЛЕН ФИЛТЪР (Последни 10)
+            updateChartFilter(10);
         } else {
             console.error("Грешка от сървъра:", response.status);
         }
@@ -310,4 +316,171 @@ document.querySelectorAll('a').forEach(link => {
             link.classList.remove('anim-out'); 
         }, 500);
     }
+});
+// Функция, която филтрира данните и обновява графиката
+function updateChartFilter(limit) {
+    // Дефинираме кои данни ще ползваме
+    let dataToDisplay = [...allFetchedLogs];
+
+    // Ако искаме последните 10, режем масива (вземаме последните 10 записа)
+    if (limit === 10) {
+        dataToDisplay = dataToDisplay.slice(-10);
+    }
+
+    // Маркираме активния бутон
+    document.getElementById('btn-10').classList.toggle('active', limit === 10);
+    document.getElementById('btn-all').classList.toggle('active', limit === 'all');
+
+    renderHealthChart(dataToDisplay);
+}
+
+// Основната функция за рисуване на Chart.js
+function renderHealthChart(logs) {
+    const ctx = document.getElementById('healthChart').getContext('2d');
+
+    // Ако графиката вече съществува, унищожаваме я, за да нарисуваме нова върху чисто
+    if (healthChart) {
+        healthChart.destroy();
+    }
+
+    // Подготвяме етикетите (Flight IDs) и данните
+    const labels = logs.map(l => {
+        const flight = l.flightID || l.flightId || '-';
+        // Форматираме датата (ако има такава), за да изглежда добре, напр. "12.04.2026"
+        let formattedDate = '';
+
+        if (l.timestamp) {
+            // Създаваме обект дата от записа в лога
+            const d = new Date(l.timestamp);
+
+            // Вземаме отделните части и добавяме водеща нула, ако са под 10 (напр. 5 става 05)
+            const day = String(d.getDate()).padStart(2, '0');
+            const month = String(d.getMonth() + 1).padStart(2, '0');
+            const year = d.getFullYear();
+
+            const hours = String(d.getHours()).padStart(2, '0');
+            const minutes = String(d.getMinutes()).padStart(2, '0');
+            const seconds = String(d.getSeconds()).padStart(2, '0');
+            // ТУК ИЗБИРАШ КАК ДА ИЗГЛЕЖДА:
+
+            // Ако искаш само датата (напр. "25.10.2026"):
+            // formattedDate = `${day}.${month}.${year}`;
+
+            // Ако искаш дата и час (напр. "25.10.2026 14:30"):
+            formattedDate = `${day}.${month}.${year} ${hours}:${minutes}:${seconds}`;
+        }
+
+        // Връщаме масив от два елемента, за да се покажат на два реда в графиката
+        return [flight, formattedDate];
     });
+    const pulseData = logs.map(l => l.heartRate || l.pulse);
+    const oxygenData = logs.map(l => l.oxygenLevel || l.oxygen);
+    const stressData = logs.map(l => l.stressIndex || l.cortisol);
+    const temperatureData = logs.map(l => l.tempInput || l.temperature)
+
+    healthChart = new Chart(ctx, {
+        type: 'line', // Линейна графика
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Пулс (bpm)',
+                    data: pulseData,
+                    borderColor: '#ff4757',
+                    backgroundColor: 'rgba(255, 71, 87, 0.1)',
+                    borderWidth: 2,
+                    tension: 0.3, // Прави линията леко заоблена
+                },
+                {
+                    label: 'Кислород (%)',
+                    data: oxygenData,
+                    borderColor: '#2ed573',
+                    borderWidth: 2,
+                    tension: 0.3
+                },
+                {
+                    label: 'Стрес (Кортизол)',
+                    data: stressData,
+                    borderColor: '#00a8ff',
+                    borderWidth: 2,
+                    tension: 0.3
+                },
+                {
+                    label: 'Температура (°C)',
+                    data: temperatureData,
+                    borderColor: '#FFEA00',
+                    borderWidth: 2,
+                    tension: 0.3
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: false,
+                    grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                    ticks: { color: '#00a8ff' }
+                },
+                x: {
+                    grid: { display: false },
+                    ticks: { color: '#00a8ff' }
+                }
+            },
+            plugins: {
+                legend: { labels: { color: '#fff' } },
+
+                // 1. НАСТРОЙКИ ЗА ПОСТОЯННО ВИДИМИТЕ ЧИСЛА
+                datalabels: {
+                    display: showDataLabels, // Взима стойността от променливата
+                    color: '#fff',
+                    align: 'top', // Показва ги над точката
+                    offset: 4,    // Отстояние от точката
+                    font: {
+                        size: 11,
+                        weight: 'bold'
+                    },
+                    // Показва само самото число без закръгляне или друго (по желание може да се форматира)
+                    formatter: function (value) {
+                        return value;
+                    }
+                },
+
+                // 2. ОПРАВЯНЕ НА БАЛОНЧЕТО (TOOLTIP) ПРИ ПОСОЧВАНЕ
+                tooltip: {
+                    callbacks: {
+                        title: function (context) {
+                            // Взимаме оригиналния масив [Полет, Дата], който подадохме по-рано
+                            const rawLabelArray = context[0].chart.data.labels[context[0].dataIndex];
+
+                            // Сглобяваме го красиво на един ред с разделител
+                            if (Array.isArray(rawLabelArray)) {
+                                return `Полет: ${rawLabelArray[0]} | Дата: ${rawLabelArray[1]}`;
+                            }
+                            return rawLabelArray; // Резервен вариант
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+function toggleDataLabels() {
+    showDataLabels = !showDataLabels;
+
+    const btn = document.getElementById('btn-toggle-labels');
+    if (showDataLabels) {
+        btn.classList.add('active');
+        btn.textContent = 'Скрий числата';
+    } else {
+        btn.classList.remove('active');
+        btn.textContent = 'Покажи числата';
+    }
+
+    // Ако графиката вече е заредена, я обновяваме мигновено
+    if (healthChart) {
+        healthChart.options.plugins.datalabels.display = showDataLabels;
+        healthChart.update();
+    }
+}

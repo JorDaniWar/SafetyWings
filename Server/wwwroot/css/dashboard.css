@@ -98,13 +98,6 @@ section{
     color: #00a8ff;
     font-weight: bold;
 }
-.stat-card {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(0, 168, 255, 0.3);
-    padding: 1.5rem;
-    border-radius: 8px;
-    box-shadow: inset 0 0 10px rgba(0, 168, 255, 0.1);
-}
 
 /* --- САЙДБАР И ТЪМЕН ФОН --- */
 .sidebar-overlay {
@@ -388,6 +381,47 @@ section{
     width: calc(50% - 10px); /* ...но му задаваме ширина като на едно поле */
     margin: 0 auto; /* и го центрираме */
 }
+
+/* ------------------
+   СТАТИСТИКАТА
+   ------------------
+*/
+
+.chart-container {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(0, 168, 255, 0.2);
+    border-radius: 8px;
+    padding: 20px;
+    margin-top: 10px;
+    height: 450px; /* Фиксирана височина за графиката */
+    position: relative;
+}
+
+.chart-controls {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+    justify-content: center;
+}
+
+    .chart-controls button {
+        background: transparent;
+        border: 1px solid #00a8ff;
+        color: #00a8ff;
+        padding: 8px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: bold;
+    }
+
+        .chart-controls button:hover,
+        .chart-controls button.active {
+            background: #00a8ff;
+            color: #0b0e14;
+            box-shadow: 0 0 10px rgba(0, 168, 255, 0.5);
+        }
+
 
 /* ЗАДЪЛЖИТЕЛНО добави това в края на файла вътре в @media за телефони, 
    за да не остане смачкано на мобилен екран: */

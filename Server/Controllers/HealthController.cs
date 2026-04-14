@@ -191,6 +191,7 @@ namespace SafetyWings.API.Controllers
               Logs =decryptedHistory
             });
         }
+
     }
 
 

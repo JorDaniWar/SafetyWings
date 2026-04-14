@@ -26,6 +26,6 @@ namespace SafetyWings.API.Models
         public DateTime DateCreated { get; set; } = DateTime.Now;
 
         // НОВО: Навигационно свойство към полетите
-        public ICollection<HealthLog> HealthLosg { get; set; } = new List<HealthLog>();
+        public ICollection<HealthLog> HealthLog { get; set; } = new List<HealthLog>();
     }
 }

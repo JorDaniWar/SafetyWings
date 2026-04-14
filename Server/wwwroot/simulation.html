@@ -2,7 +2,7 @@
 <html lang="bg">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="css/dashboard.css?v=1.1"> 
+    <link rel="stylesheet" href="css/simulation.css"> 
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✈️</text></svg>">
     <title> Safety Wings - Simulation</title>
 </head>
@@ -30,6 +30,40 @@
                     id="logout-btn">Изход</button>
             </nav>
         </aside>
-    
+        <main>
+            <section class= "simulation-container" id="simulation-container">
+                <header class="simulation-header">
+                    <h1>Симулация на данни</h1>
+                </header>
+                <div class="simulation-content" id="simulation-content">
+                    <button class="simulation-content-button" id="simulastion-content-button" onclick="simulateLogs()">Симулация </button>
+                </div>
+            </section>
+            <section class="added-logs-container" id="added-logs-container">
+                <header class="added-logs-header">
+                    <h1>Добавени записи</h1>
+                </header>
+            </section>
+            <div class="added-logs-content">
+                <table class="added-logs-table">
+                    <thead>
+                        <tr>
+                            <th>Номер</th>
+                            <th>Пулс</th>
+                            <th>Кислородна Сатурация</th>
+                            <th>Температура</th>
+                            <th>Кортизол</th>
+                            <th>Дата и час</th>
+                        </tr>
+                    </thead>
+                    <tbody id="added-logs-all">
+                        <tr>
+                            <td colspan="10" style="text-align: center; color: white; font-size: 20px; font-weight:bold;">В момента няма добавени записи!</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button class="showAllLogs" id="showAllLogs">Виж всички записи</button>
+            </div>
+        </main>
         <script src="js/simulation.js"></script>
 </body>
