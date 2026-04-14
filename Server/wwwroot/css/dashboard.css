@@ -249,11 +249,28 @@ section{
     text-align: center;
 }
 .flights-table button {
-    background-color: transparent;
-    border: none;
-    color: #00a8ff;
-    cursor: pointer;
-    font-size: 18px;
+     background-color: #00a8ff;
+     border: 1px solid rgba(0, 168, 255, 0.2);
+     border-radius: 8px;
+     width: 150px;
+     height: 25px; /* Увеличено леко за по-добро центриране, вместо странни падинги */
+     color: #000;
+     cursor: pointer;
+     font-size: 18px;
+        /* За перфектно центриране на текста и иконката */
+     display: inline-flex;
+     align-items: center;
+     justify-content: center;
+     gap: 5px; /* Разстояние между лупата и текста */
+        /* Транзицията се слага тук, за да е плавна и в двете посоки */
+     transition: all 0.3s ease;
+}
+
+        /* Стил при посочване с мишката */
+.flights-table button:hover {
+    background-color: #fff;
+    border-color: #fff; /* Поправено от border: #fff; */
+    color: #000;
 }
 
 .flights-table th {
@@ -279,7 +296,10 @@ section{
 }
 
 .highlighted-row {
-    background-color: #ffeeba !important; /* Жълтеникав цвят, смени го по твой вкус */
+    border-style: solid;
+    border-color: yellow;
+    border-radius: 25px;
+    background-color: transparent !important; /* Жълтеникав цвят, смени го по твой вкус */
     transition: background-color 0.5s ease; /* Плавно преливане */
 }
 

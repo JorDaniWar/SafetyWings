@@ -145,8 +145,27 @@ async function loadAllLogs() {
         });
 
         if (response.ok) {
-            const allLogs = await response.json();
-            renderAllLogsTable(allLogs);
+            // Вземаме целия обект от сървъра (имена + логове)
+            const data = await response.json();
+
+            // 1. ПОКАЗВАМЕ ИМЕНАТА В WELCOME СЕКЦИЯТА
+            // (Уверете се, че в HTML имате елемент с id="welcome-name")
+            const welcomeElement = document.getElementById('welcome-name');
+            if (welcomeElement) {
+                // Забележка: ASP.NET обикновено прави първите букви малки в JSON (camelCase)
+                welcomeElement.textContent = `${data.firstName} ${data.lastName}`;
+            }
+
+            // 2. ПОДАВАМЕ САМО ЛОГОВЕТЕ КЪМ ТАБЛИЦАТА
+            // Използваме data.logs, а не целия обект
+            if (data.logs) {
+                renderAllLogsTable(data.logs);
+            } else {
+                // Застраховка, ако случайно няма логове
+                renderAllLogsTable([]);
+            }
+        } else {
+            console.error("Грешка от сървъра:", response.status);
         }
     } catch (error) {
         console.error("Грешка при изтегляне на всички записи:", error);
@@ -217,11 +236,11 @@ function renderAllLogsTable(allLogs) {
         row.innerHTML = `
             <td style="text-align:center;">✅</td>
             <td>${flightID}</td>
-            <td>${dateString}</td>
             <td>${pulse}</td>
             <td>${oxygen}</td>
             <td>${temp}</td>
             <td>${cort}</td>
+            <td>${dateString}</td>
         `;
         tableBody.appendChild(row);
     });
@@ -243,7 +262,7 @@ function scrollToLog(logID) {
         // Махаме цвета след 3 секунди
         setTimeout(() => {
             targetRow.classList.remove('highlighted-row');
-        }, 3000);
+        }, 10000);
     } else {
         console.warn("Редът не е намерен! ID:", logID);
     }

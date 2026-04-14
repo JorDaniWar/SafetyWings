@@ -149,7 +149,15 @@ namespace SafetyWings.API.Controllers
             if (string.IsNullOrEmpty(UserIdClaim)) return Unauthorized();
             int pilotId = int.Parse(UserIdClaim);
 
-            // 1. Взимаме последните 20 записа от базата за конкретния пилот
+            var userNames = await _context.Users
+            .Where(u => u.UserID == pilotId) // 1. Намираме конкретния потребител по ID
+            .Select(u => new { u.FirstName, u.LastName }) // 2. Взимаме САМО нужните колони
+            .FirstOrDefaultAsync(); // 3. Извличаме данните от базата
+
+            // Проверяваме дали потребителят е намерен
+            string firstName = userNames?.FirstName ?? "Неизвестен";
+            string lastName = userNames?.LastName ?? "Потребител";
+
             var logs = await _context.HealthLogs
                 .Where(l => l.UserID == pilotId)
                 .OrderBy(l => l.Timestamp)
@@ -176,7 +184,12 @@ namespace SafetyWings.API.Controllers
 
             }).OrderBy(l => l.Timestamp); // Подреждаме ги от най-стария към най-новия за графиката
 
-            return Ok(decryptedHistory);
+            return Ok(new 
+            {
+              FirstName = firstName,
+              LastName = lastName,
+              Logs =decryptedHistory
+            });
         }
     }
 
