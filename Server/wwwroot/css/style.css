@@ -1,120 +1,212 @@
+﻿html{
+    scroll-behavior:smooth;
+}
 :root {
-    --primary-blue: #00a8ff;    
-    --bg-dark: #0b0e14;          
-    --card-bg: rgba(255, 255, 255, 0.05); 
-    --text-light: #e0e6ed;      
-    --accent-red: #ff4757;     
+    --primary-blue: #00a8ff;
+    --bg-dark: #0b0e14;
+    --card-bg: rgba(255, 255, 255, 0.05);
+    --text-light: #e0e6ed;
+    --accent-red: #ff4757;
 }
 
 * {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
-a{
-    color: white;
+body{
+    
+}
+.main-page-header{
+    z-index: 1000;
+    position: fixed;
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 20px;
+    align-items: center;
+    width: 100%;
+    height: 80px;
+    background-color: var(--bg-dark);
+    border-bottom: 3px solid var(--primary-blue);
+}
+.redirection-links {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    box-sizing: border-box;
+}
+.main-page-header button {
+    font-weight: bold;
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+    width: max-content;
+    height: 40px;
+    padding: 10px 20px;
+    font-size: 18px;
+    background-color: transparent;
+    color: var(--primary-blue);
+    border-radius: 10px;
+    border-color: var(--primary-blue);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.main-page-header button:hover{
+    color: var(--bg-dark);
+    background-color: var(--primary-blue);
+}
+.main-page-header a {
+    font-size: 40px;
+    font-weight: bold;
+    color: var(--primary-blue);
     text-decoration: none;
     transition: all 0.3s ease;
 }
-a:hover {
-    color: purple;
+
+.main-page-header .redirection-links a:hover{
     text-decoration: underline;
-    text-shadow: 
-        0 0 5px var(--primary-blue),     
-        0 0 15px var(--primary-blue),    
-        0 0 30px var(--primary-blue);    
-    font-weight: bold;
+    color: white;
 }
-body {
-    background-color: var(--bg-dark);
-    color: var(--text-light);
-    height: 100vh;
+
+/*Снимката*/
+/* 1. КОНТЕЙНЕРЪТ СЪС СНИМКАТА */
+.image-container {
+    /* Слагаме снимката като фон директно тук */
+    background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('../Assets/EmiratesA380.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 100vh; /* Цял екран */
+    /* Центрираме кутията с текст */
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow: auto; 
+    /* Тъй като хедърът ти е 80px и е fixed, добавяме това, 
+       за да не се застъпват */
+    padding-top: 80px;
 }
-.login__footer {
-    position: relative;
-    margin-top: 20px;
-    bottom: 10px;
-    font-size: 0.8rem;
-    color: var(--text-light);
-    text-align: center;
-    width: 100%;
-}
-.login-card {
-    margin-top: 5px;
-    background: var(--card-bg);
-    backdrop-filter: blur(10px);  
+
+/* 2. ТЪМНАТА КУТИЯ С ТЕКСТА */
+.hero-box {
+    background: rgba(15, 23, 42, 0.7);
+    backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 2.5rem;
     border-radius: 15px;
-    width: 100%;
-    max-width: 400px;
-    box-shadow: 0 8px 32px 0 var(--primary-blue);
+    padding: 40px;
     text-align: center;
-}
-.login-card:hover {
-    box-shadow: 0 12px 48px 5px var(--primary-blue);
-}
-
-h1 {
-    letter-spacing: 5px;
-    color: var(--primary-blue);
-    margin-bottom: 0.5rem;
-    text-shadow: 0 0 10px var(--primary-blue);
-}
-.input-group {
-    margin-bottom: 1.5rem;
-    text-align: left;
-}
-
-.input-group label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-size: 0.8rem;
-    text-transform: uppercase;
-    color: var(--primary-blue);
-    letter-spacing: 1px;
-}
-
-.input-group input {
-    width: 100%;
-    padding: 0.8rem;
-    background: rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 5px;
     color: white;
-    outline: none;
-    transition: 0.3s;
+    max-width: 600px;
 }
 
-.input-group input:focus {
-    border-color: var(--primary-blue);
-    box-shadow: 0 0 10px rgba(0, 168, 255, 0.3);
+    /* 3. ДИЗАЙН НА ТЕКСТА И БУТОНИТЕ */
+    .hero-box h1 {
+        font-weight: bold;
+        margin: 0 0 15px 0;
+        font-size: 40px;
+    }
+
+    .hero-box p {
+        margin: 0;
+        font-size: 20px;
+    }
+
+.hero-buttons {
+    margin-top: 25px;
+    display: flex;
+    gap: 15px;
+    justify-content: center;
 }
 
-.btn-login {
-    font-size: 25px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    width: 100%;
-    padding: 1rem;
-    background: transparent;
+.btn-primary, .btn-secondary {
+    cursor: pointer;
+    padding: 12px 24px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background-color: var(--primary-blue);
+    color: var(--bg-dark);
+}
+
+    .btn-primary:hover {
+        background-color: white;
+    }
+
+.btn-secondary {
+    background-color: transparent;
     border: 2px solid var(--primary-blue);
     color: var(--primary-blue);
-    font-weight: bold;
-    letter-spacing: 2px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: all 0.4s ease;
-    margin-top: 1rem;
 }
 
-.btn-login:hover {
-    background: var(--primary-blue);
-    color: var(--bg-dark);
-    box-shadow: 0 0 20px var(--primary-blue), 0 0 40px var(--primary-blue);
-    transform: translateY(-2px);
+    .btn-secondary:hover {
+        background-color: rgba(0, 168, 255, 0.1);
+    }
+
+/* Секция с предимства (Долната бяла част) */
+.features-section {
+    padding: 80px 20px;
+    background-color: #f8f9fa; /* Много светло сиво, по-приятно от чисто бяло */
+    text-align: center;
 }
+
+    .features-section h2 {
+        color: #333;
+        margin-bottom: 50px;
+        font-size: 2em;
+    }
+
+/* Мрежа за картите */
+.features-grid {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+    flex-wrap: wrap; /* За да падат надолу на малки екрани */
+}
+
+/* Самите карти */
+.feature-card {
+    background: white;
+    padding: 40px 20px;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05); /* Мека сянка */
+    width: 300px;
+    transition: transform 0.3s ease;
+}
+
+    .feature-card:hover {
+        transform: translateY(-10px); /* Повдигане при посочване с мишката */
+    }
+
+.feature-icon {
+    font-size: 40px;
+    margin-bottom: 20px;
+}
+
+.feature-card h3 {
+    color: #023e8a;
+    margin-bottom: 15px;
+}
+
+.feature-card p {
+    color: #666;
+    line-height: 1.6;
+}
+
+/* Долен колонтитул */
+footer {
+    background-color: #0b0f19;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    font-size: 0.9em;
+}
+
+    
+    /**/

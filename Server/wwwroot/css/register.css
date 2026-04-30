@@ -13,6 +13,7 @@
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 a{
+    font-size: 20px;
     color: white;
     text-decoration: none;
     transition: all 0.3s ease;
@@ -35,6 +36,7 @@ body {
     align-items: center;
     overflow: auto;
 }
+
 .register__footer {
     position: relative;
     margin-top: 20px;
@@ -43,6 +45,10 @@ body {
     color: var(--text-light);
     text-align: center;
     width: 100%;
+}
+.register__footer .register__link{
+    font-size: 21px;
+    font-weight: bold;
 }
 .register-card {
     margin-top: 5px;

@@ -5,7 +5,9 @@ if (!token) {
     alert("Грешка: Не сте влезли в профила си! Ще бъдете пренасочени към началната страница.");
     window.location.href = 'index.html';
 }
-
+//
+// Страничен панел
+//
 document.addEventListener('DOMContentLoaded', () => {
     
     const sidebarBtn = document.querySelector('.sidebar-button');

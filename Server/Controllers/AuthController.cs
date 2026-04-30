@@ -8,6 +8,7 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
 using SafetyWings.API.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SafetyWings.API.Controllers
 {
@@ -100,7 +101,7 @@ namespace SafetyWings.API.Controllers
                 new Claim(ClaimTypes.Name, user.Username),
                 new Claim("UserId", user.UserID.ToString())
                     }),
-                    Expires = DateTime.UtcNow.AddMinutes(5), // Токенът важи 7 дни
+                    Expires = DateTime.UtcNow.AddSeconds(10), // Токенът важи 7 дни
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
                     Issuer = _configuration["Jwt:Issuer"],  
                     Audience = _configuration["Jwt:Audience"]
@@ -110,7 +111,17 @@ namespace SafetyWings.API.Controllers
                 var tokenString = tokenHandler.WriteToken(token);
 
                 return Ok(new { Token = tokenString, Message = "Успешен вход!" });
+
             
+        }
+        [Authorize]
+        [HttpGet("profile")]
+        public IActionResult GetProfile()
+        {
+            // Ако си тук, значи C# вече е проверил токена и той Е ВАЛИДЕН.
+            // .NET автоматично е попълнил данните от токена в обекта User.
+            var username = User.Identity.Name;
+            return Ok(new { message = $"Здравей, {username}!" });
         }
     }
 }

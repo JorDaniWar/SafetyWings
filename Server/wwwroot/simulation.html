@@ -9,7 +9,7 @@
 <body>
     <header class="header">
         <button class="sidebar-button" onclick="">☰</button>
-        <a class="logo" href="simulation.html">✈️ Safety Wings</a>
+        <a class="logo" href="index.html">✈️ Safety Wings</a>
     </header>
     <div class="dashboard-container">
         <div class="sidebar-overlay" id="sidebar-overlay"></div>
@@ -43,27 +43,28 @@
                 <header class="added-logs-header">
                     <h1>Добавени записи</h1>
                 </header>
-            </section>
-            <div class="added-logs-content">
-                <table class="added-logs-table">
-                    <thead>
-                        <tr>
-                            <th>Номер</th>
-                            <th>Пулс</th>
-                            <th>Кислородна Сатурация</th>
-                            <th>Температура</th>
-                            <th>Кортизол</th>
-                            <th>Дата и час</th>
-                        </tr>
-                    </thead>
-                    <tbody id="added-logs-all">
-                        <tr>
-                            <td colspan="10" style="text-align: center; color: white; font-size: 20px; font-weight:bold;">В момента няма добавени записи!</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="added-logs-content">
+                    <table class="added-logs-table">
+                        <thead>
+                            <tr>
+                                <th>Номер</th>
+                                <th>Пулс</th>
+                                <th>Кислородна Сатурация</th>
+                                <th>Температура</th>
+                                <th>Кортизол</th>
+                                <th>Дата и час</th>
+                            </tr>
+                        </thead>
+                        <tbody id="added-logs-all">
+                            <tr>
+                                <td colspan="10" style="text-align: center; color: white; font-size: 20px; font-weight:bold;">В момента няма добавени записи!</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
                 <button class="showAllLogs" id="showAllLogs">Виж всички записи</button>
-            </div>
+            </section>
+            
         </main>
         <script src="js/simulation.js"></script>
 </body>

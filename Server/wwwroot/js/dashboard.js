@@ -1,14 +1,47 @@
-const token = localStorage.getItem('token');
+
 let healthChart = null;
 let allFetchedLogs = [];
 let showDataLabels = true; // По подразбиране числата ще се виждат
 
 // Регистрираме плъгина глобално
 Chart.register(ChartDataLabels);
-if (!token) {
-    alert("Грешка: Не сте влезли в профила си! Ще бъдете пренасочени към началната страница.");
-    window.location.href = 'index.html';
-}
+//Проверка за вход
+document.addEventListener('DOMContentLoaded', async () => {
+    // 1. Първо взимаме токена
+    const token = localStorage.getItem('token');
+
+    // Ако изобщо няма токен, директно го гоним
+    if (!token) {
+        alert('Не сте влезли в профила си! Ще бъдете пренасочени към формата за вход.');
+        window.location.href = 'login.html';
+        return;
+    }
+
+    try {
+        // 2. Правим заявката
+        const response = await fetch('/api/Auth/profile',{
+            headers: { 'Authorization': `Bearer ${token}` }
+        }); // <-- ВАЖНО: FETCH ПРИКЛЮЧВА ТУК със скоба и точка и запетая!
+
+        // 3. ЧАК СЛЕД ТОВА проверяваме отговора
+        if (!response.ok) {
+            alert('Вашата сесия е изтекла или невалидна! Ще бъдете пренасочени към формата за вход!');
+            console.log("Токенът изтече или е невалиден!");
+            localStorage.removeItem('token');
+            window.location.href = 'login.html';
+            return; // Спираме изпълнението надолу
+        }
+
+        // Ако всичко е наред (response.ok е true), продължаваш с данните:
+        const userData = await response.json();
+        console.log("Успешен вход за:", userData.username);
+        // ... твоят код за визуализация на данните ...
+
+    } catch (error) {
+        console.error("Грешка при връзката със сървъра:", error);
+    }
+});
+
 // ==========================================
     // 1. САЙДБАР И НАВИГАЦИЯ
     // ==========================================
@@ -95,7 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
 
                 if (response.ok) {
-                    showMessage("Успешен запис на полета! 🚀", "success");
+                    showMessage("Успешен запис на полета!", "success");
                     addLogForm.reset(); // Изчистваме полетата
                     loadHistory();      // Зареждаме таблицата наново
                     loadAllLogs();     // Зареждаме и всички записи наново
@@ -121,6 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // 4. ФУНКЦИИ ЗА ИЗТЕГЛЯНЕ И РИСУВАНЕ НА ТАБЛИЦАТА
 // ==========================================
 async function loadHistory() {
+    const token = localStorage.getItem('token');
     if (!token) return;
 
     try {
@@ -138,6 +172,7 @@ async function loadHistory() {
     }
 }
 async function loadAllLogs() {
+    const token = localStorage.getItem('token');
     if (!token) {
         alert("Грешка: Не сте влезли в профила си! Ще бъдете пренасочени към началната страница.");
         window.location.href = 'index.html';
@@ -334,7 +369,9 @@ function updateChartFilter(limit) {
     renderHealthChart(dataToDisplay);
 }
 
+//
 // Основната функция за рисуване на Chart.js
+//
 function renderHealthChart(logs) {
     const ctx = document.getElementById('healthChart').getContext('2d');
 
