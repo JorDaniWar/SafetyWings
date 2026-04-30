@@ -23,7 +23,7 @@ namespace SafetyWings.API.Controllers
             _encryptionService = encryptionService;
         }
 
-        [HttpPost("simulate-step")]
+        [HttpPost("simulate-log")]
         public async Task<IActionResult> SimulateStep()
         {
             // 1. Взимаме ID-то на логнатия пилот от токена
@@ -48,7 +48,7 @@ namespace SafetyWings.API.Controllers
             var dbLog = new HealthLog
             {
                 UserID = currentUserId,
-                FlightID = "SIM-" + DateTime.Now.ToString("HHmmss"), // Генерираме фиктивен номер на полет
+                FlightID = "SIM" + DateTime.Now.ToString("HHmmss"), // Генерираме фиктивен номер на полет
                 HeartRate = _encryptionService.Encrypt(heartRate.ToString()),
                 OxygenLevel = _encryptionService.Encrypt(oxygen.ToString()),
                 Temperature = _encryptionService.Encrypt(temperature.ToString("F1")),
@@ -63,6 +63,7 @@ namespace SafetyWings.API.Controllers
             // 5. За фронтенда връщаме НЕКРИПТИРАНИТЕ числа, за да може JS таблицата да ги нарисува лесно
             var responseData = new
             {
+                flightID = dbLog.FlightID,
                 timestamp = dbLog.Timestamp,
                 heartRate = heartRate,
                 oxygenSaturation = oxygen,

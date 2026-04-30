@@ -1,4 +1,10 @@
 let interval = 2;
+// Взимаме токена за оторизация (ако контролерът го изисква)
+const token = localStorage.getItem('token');
+if (!token) {
+    alert("Грешка: Не сте влезли в профила си! Ще бъдете пренасочени към началната страница.");
+    window.location.href = 'index.html';
+}
 
 document.addEventListener('DOMContentLoaded', () => {
     
@@ -70,6 +76,66 @@ document.querySelectorAll('a').forEach(link => {
     }
 });
 
+async function startSimulationSequence() {
+    
+
+    // Настройки на цикъла
+    const totalDuration = 10000; // 10 секунди
+    const interval = 2000;       // 2 секунди
+    const iterations = totalDuration / interval; // Точно 5 изпълнения
+
+    // Опционално: Заключваме бутона, за да не се цъка по време на цикъла
+    const btn = document.getElementById('simulate-btn');
+    if (btn) {
+        btn.disabled = true;
+        btn.innerText = "Симулиране...";
+    }
+
+    for (let i = 0; i < iterations; i++) {
+        try {
+            // Правим заявката към контролера (смени URL-а с твоя точен маршрут)
+            const response = await fetch('/api/Simulation/simulate-log', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error(`Сървърът върна грешка: ${response.status}`);
+            }
+
+            const result = await response.json();
+
+            // Подаваме данните към твоята функция за рисуване
+            // Забележка: Ако контролерът връща директно обекта, ползвай addRecordToTable(result)
+            // Ако връща { success: true, data: {...} }, ползвай result.data
+            if (result.data) {
+                addRecordToTable(result.data);
+            } else {
+                addRecordToTable(result);
+            }
+
+        } catch (error) {
+            console.error("Грешка при изтегляне на данните:", error);
+            break; // Прекъсваме цикъла, ако сървърът гръмне
+        }
+
+        // Чакаме 2 секунди ПРЕДИ следващото завъртане 
+        // (Пропускаме чакането на последната стъпка, за да приключим веднага)
+        if (i < iterations - 1) {
+            if (btn) btn.innerText = `Симулиране (остават ${10 - (i + 1) * 2} сек)...`;
+            await new Promise(resolve => setTimeout(resolve, interval));
+        }
+    }
+
+    // Връщаме бутона в нормално състояние след края на 10-те секунди
+    if (btn) {
+        btn.disabled = false;
+        btn.innerText = "Симулирай данни";
+    }
+}
 function addRecordToTable(data) {
     const tableBody = document.querySelector('#added-logs-table tbody');
     const row = document.createElement('tr');
@@ -90,7 +156,7 @@ function addRecordToTable(data) {
 
     row.innerHTML = `
     <td style="padding: 10px; border-bottom: 1px solid #ddd; text-align: center; ${statusStyle}">${icon} ${data.alertNote}</td>
-    <td style="padding: 10px; border-bottom: 1px solid #ddd; text-align: center;">THY50</td>     
+    <td style="padding: 10px; border-bottom: 1px solid #ddd; text-align: center;">${data.flightID}</td>     
         <td style="padding: 10px; border-bottom: 1px solid #ddd; text-align: center;">${data.heartRate}</td>
         <td style="padding: 10px; border-bottom: 1px solid #ddd; text-align: center;">${data.oxygenSaturation}%</td>
         <td style="padding: 10px; border-bottom: 1px solid #ddd; text-align: center;">${data.temperature.toFixed(1)}</td>
