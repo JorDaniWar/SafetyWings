@@ -44,10 +44,8 @@ const moreBtn = document.getElementById('btn-secondary')
 // Бутоп Вход
 //
 loginBtn.addEventListener('click', async function (event) {
-    
     event.preventDefault();
-   
-    const token = localStorage.getItem('token')
+    const token = localStorage.getItem('token');
     if (token) {
         try {
             // 2. Правим заявката
@@ -63,14 +61,19 @@ loginBtn.addEventListener('click', async function (event) {
                 window.location.href = 'login.html';
                 return; // Спираме изпълнението надолу
             }
-
+            else {
+                // ЕТО ТОВА ЛИПСВАШЕ: 
+                // Ако изобщо няма токен, прати го да се логва!
+                window.location.href = 'dashboard.html';
+            }
 
         } catch (error) {
             window.location.href = 'login.html';
         }
     }
-
-    
+    else {
+        window.location.href = 'login.html';
+    }
 });
 ///
 // Бутон Регастрация

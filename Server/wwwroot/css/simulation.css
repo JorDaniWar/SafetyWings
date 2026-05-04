@@ -258,3 +258,25 @@ section{
     background: rgba(0, 168, 255, 0.05);
     transition: all 0.3s ease;
 }
+.show-all-logs {
+    font-weight: bold;
+    align-items: center;
+    justify-content: center;
+    background-color: #00a8ff;
+    border: 1px solid rgba(0, 168, 255, 0.2);
+    border-radius: 8px;
+    display: flex;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
+    font-size: 20px;
+    color: #000;
+    cursor: pointer;
+    width: 200px;
+    height: 55px;
+    transition: all 0.3s ease;
+}
+.show-all-logs:hover{
+    background-color: white;
+    border-color: white;
+}
