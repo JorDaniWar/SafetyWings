@@ -128,13 +128,15 @@
                     <h1>Статистика</h1>
                 </header>
 
-                <div class="chart-controls">
+                <div class="chart-controls" id="chart-controls" style="display: none;">
                     <button onclick="updateChartFilter(10)" id="btn-10">Последни 10</button>
                     <button onclick="updateChartFilter('all')" id="btn-all">Всички записи</button>
                     <button onclick="toggleDataLabels()" id="btn-toggle-labels" class="active">Скрий числата</button>
                 </div>
 
                 <div class="chart-container">
+                    <div id="no-data-message" style="display: block; text-align: center; color: #888; font-size: 1.2rem; font-weight: 500;">
+                        Добавете записи, за да видите статистика </div>
                     <canvas id="healthChart"></canvas>
                 </div>
             </section>

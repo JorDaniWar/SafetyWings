@@ -3,37 +3,25 @@ let simulation = false;
 // Взимаме токена за оторизация (ако контролерът го изисква)
 const showBtn = document.getElementById('show-all-logs');
 
-document.addEventListener('DOMContentLoaded', async function (event) {
-    const token = localStorage.getItem('token');
-    event.preventDefault();
-    if (!token) {
-        alert('Не сте влезли в профила си! Ще бъдете пренасочени към формата за вход.');
-        window.location.href = 'login.html';
-        return;
+document.addEventListener('DOMContentLoaded', () => {
+    verifySession();
+});
+// EVENT 2: The "Back" Button (bfcache)
+window.addEventListener('pageshow', (event) => {
+    // event.persisted is TRUE if the browser loaded the page from the "Back" button cache
+    if (event.persisted) {
+        console.log("Page loaded from Back button cache. Re-verifying token...");
+        verifySession();
     }
+});
 
-    try {
-        // 2. Правим заявката
-        const response = await fetch('/api/Auth/profile', {
-            headers: { 'Authorization': `Bearer ${token}` }
-        }); // <-- ВАЖНО: FETCH ПРИКЛЮЧВА ТУК със скоба и точка и запетая!
-
-        // 3. ЧАК СЛЕД ТОВА проверяваме отговора
-        if (!response.ok) {
-            alert('Вашата сесия е изтекла или невалидна! Ще бъдете пренасочени към формата за вход!');
-            console.log("Токенът изтече или е невалиден!");
-            localStorage.removeItem('token');
-            window.location.href = 'login.html';
-            return; // Спираме изпълнението надолу
-        }
-
-        // Ако всичко е наред (response.ok е true), продължаваш с данните:
-        const userData = await response.json();
-        console.log("Успешен вход за:", userData.username);
-        // ... твоят код за визуализация на данните ...
-
-    } catch (error) {
-        console.error("Грешка при връзката със сървъра:", error);
+// EVENT 3: Switching Tabs (Bonus!)
+// If the user leaves the tab open, the token expires, and they come back an hour later.
+document.addEventListener('visibilitychange', () => {
+    // document.visibilityState is 'visible' when the user looks at this tab again
+    if (document.visibilityState === 'visible') {
+        console.log("User returned to the tab. Re-verifying token...");
+        verifySession();
     }
 });
 
@@ -209,3 +197,39 @@ function addRecordToTable(data) {
 showBtn.addEventListener('click', function(event){
     event.preventDefault();
 });
+
+async function verifySession() {
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+        alert('Вие не сте влезли в профила си! Ще бъдете пренасочени към страницата за вход.');
+        window.location.href = 'login.html';
+        return;
+    }
+
+    try {
+        const response = await fetch('/api/Auth/profile', {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (!response.ok) {
+            alert("Вашата сесия е изтекла или невалидна! Ще бъдете пренасочени към формата за вход.");
+            localStorage.removeItem('token');
+            window.location.href = 'login.html';
+            return;
+        }
+
+        // If valid, load the user data (like you already do)
+        const userData = await response.json();
+
+        const welcomeElement = document.getElementById('welcome-name');
+        if (welcomeElement) {
+            const fName = userData.firstName || userData.FirstName || userData.username || "Unknown";
+            const lName = userData.lastName || userData.LastName || "";
+            welcomeElement.textContent = `${fName} ${lName}`;
+        }
+
+    } catch (error) {
+        console.error("Server connection error:", error);
+    }
+}

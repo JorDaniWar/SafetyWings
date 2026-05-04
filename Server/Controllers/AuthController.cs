@@ -101,7 +101,7 @@ namespace SafetyWings.API.Controllers
                 new Claim(ClaimTypes.Name, user.Username),
                 new Claim("UserId", user.UserID.ToString())
                     }),
-                    Expires = DateTime.UtcNow.AddSeconds(10), // Токенът важи 7 дни
+                    Expires = DateTime.UtcNow.AddSeconds(30), // Токенът важи 7 дни
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
                     Issuer = _configuration["Jwt:Issuer"],  
                     Audience = _configuration["Jwt:Audience"]
@@ -116,12 +116,32 @@ namespace SafetyWings.API.Controllers
         }
         [Authorize]
         [HttpGet("profile")]
-        public IActionResult GetProfile()
+        public async Task<IActionResult> GetProfile() // Добавяме async Task
         {
-            // Ако си тук, значи C# вече е проверил токена и той Е ВАЛИДЕН.
-            // .NET автоматично е попълнил данните от токена в обекта User.
-            var username = User.Identity.Name;
-            return Ok(new { message = $"Здравей, {username}!" });
+            // 1. Взимаме потребителското име (Username) от JWT токена
+            var username = User.Identity?.Name;
+
+            if (string.IsNullOrEmpty(username))
+            {
+                return Unauthorized("Невалиден токен.");
+            }
+
+            // 2. Търсим пълните данни за този потребител в базата данни
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
+
+            if (user == null)
+            {
+                return NotFound(new { message = "Потребителят не е намерен." });
+            }
+
+            // 3. Връщаме обекта с FirstName и LastName към JavaScript
+            return Ok(new
+            {
+                message = $"Здравей, {user.FirstName}!",
+                username = user.Username,
+                firstName = user.FirstName,
+                lastName = user.LastName
+            });
         }
     }
 }
