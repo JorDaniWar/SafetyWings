@@ -12,8 +12,8 @@ using SafetyWings.API.Data;
 namespace SafetyWings.API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260317132150_Add-Migrations FKs")]
-    partial class AddMigrationsFKs
+    [Migration("20260430083212_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -105,7 +105,7 @@ namespace SafetyWings.API.Migrations
             modelBuilder.Entity("SafetyWings.API.Models.HealthLog", b =>
                 {
                     b.HasOne("SafetyWings.API.Models.User", "User")
-                        .WithMany("HealthLosg")
+                        .WithMany("HealthLog")
                         .HasForeignKey("UserID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -115,7 +115,7 @@ namespace SafetyWings.API.Migrations
 
             modelBuilder.Entity("SafetyWings.API.Models.User", b =>
                 {
-                    b.Navigation("HealthLosg");
+                    b.Navigation("HealthLog");
                 });
 #pragma warning restore 612, 618
         }

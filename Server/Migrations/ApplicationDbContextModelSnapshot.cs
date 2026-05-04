@@ -102,7 +102,7 @@ namespace SafetyWings.API.Migrations
             modelBuilder.Entity("SafetyWings.API.Models.HealthLog", b =>
                 {
                     b.HasOne("SafetyWings.API.Models.User", "User")
-                        .WithMany("HealthLosg")
+                        .WithMany("HealthLog")
                         .HasForeignKey("UserID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -112,7 +112,7 @@ namespace SafetyWings.API.Migrations
 
             modelBuilder.Entity("SafetyWings.API.Models.User", b =>
                 {
-                    b.Navigation("HealthLosg");
+                    b.Navigation("HealthLog");
                 });
 #pragma warning restore 612, 618
         }
