@@ -120,6 +120,7 @@ body{
 }
 
 .btn-primary, .btn-secondary {
+    font-size: 15px;
     cursor: pointer;
     padding: 12px 24px;
     border-radius: 5px;
@@ -138,13 +139,13 @@ body{
     }
 
 .btn-secondary {
-    background-color: transparent;
+    background-color: var(--primary-blue);
     border: 2px solid var(--primary-blue);
-    color: var(--primary-blue);
+    color: var(--bg-dark);
 }
 
     .btn-secondary:hover {
-        background-color: rgba(0, 168, 255, 0.1);
+        background-color: white;
     }
 
 .features-section {

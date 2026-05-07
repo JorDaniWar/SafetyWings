@@ -153,10 +153,7 @@ async function loadHistory() {
 
 async function loadAllLogs() {
     const token = localStorage.getItem('token');
-    if (!token) {
-        window.location.href = 'index.html';
-        return;
-    }
+    if (!token) { window.location.href = 'index.html'; return; }
 
     try {
         const response = await fetch('/api/Health/all', {
@@ -166,19 +163,22 @@ async function loadAllLogs() {
 
         if (response.ok) {
             const data = await response.json();
-            allFetchedLogs = data.logs || [];
 
-            // Рендираме таблицата
+            // Покрива всички варианти на отговор
+            if (Array.isArray(data)) allFetchedLogs = data;
+            else if (Array.isArray(data.logs)) allFetchedLogs = data.logs;
+            else if (Array.isArray(data.data)) allFetchedLogs = data.data;
+            else allFetchedLogs = [];
+
+
+            console.log("Заредени записи:", allFetchedLogs.length);
+            console.log("Примерен запис:", allFetchedLogs[0]);
+
             renderAllLogsTable(allFetchedLogs);
-            // Пускаме графиката
             updateChartFilter(10);
-        } else {
-            console.error("Грешка от сървъра:", response.status);
-            updateChartFilter(10); // За да се покаже надписа, ако няма данни
         }
     } catch (error) {
-        console.error("Грешка при изтегляне на всички записи:", error);
-        updateChartFilter(10);
+        console.error("Грешка:", error);
     }
 }
 
@@ -398,6 +398,7 @@ function renderHealthChart(logs) {
         return isNaN(v) ? null : v;
     });
 
+
     healthChart = new Chart(ctx, {
         type: 'line',
         data: {
@@ -437,6 +438,9 @@ function renderHealthChart(logs) {
         options: {
             responsive: true,
             maintainAspectRatio: false,
+            animation: {
+                y: { duration: 1000, from: 500 }
+            }, 
             layout: {
                 padding: { top: 25, right: 30, bottom: 5, left: 10 }
             },

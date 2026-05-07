@@ -19,6 +19,6 @@ public class HealthLog
 
      public DateTime Timestamp { get; set; } = DateTime.Now;
 
-    [JsonIgnore] // Това обърква ASP.NET, когато се опитва да чете от фронтенда
+    [JsonIgnore] 
     public User? User { get; set; }
 }

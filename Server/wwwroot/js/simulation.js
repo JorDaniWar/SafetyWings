@@ -167,7 +167,6 @@ function addRecordToTable(data) {
     const row = document.createElement('tr');
     const tableBody = document.getElementById('added-logs-all');
 
-    // ако има само 1 ред и е "няма записи" → махни го
     if (tableBody.children.length === 1 && tableBody.textContent.includes('няма')) {
         tableBody.innerHTML = '';
     }
