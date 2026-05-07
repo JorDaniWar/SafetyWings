@@ -37,7 +37,7 @@
                     <h1>Симулация на данни</h1>
                 </header>
                 <div class="simulation-content" id="simulation-content">
-                    <button class="simulation-content-button" id="simulastion-content-button" onclick="simulateLogs()">Симулация </button>
+                    <button class="simulation-content-button" id="simulastion-content-button" onclick="startSimulationSequence()">Симулация </button>
                 </div>
             </section>
             <section class="added-logs-container" id="added-logs-container">
@@ -45,9 +45,10 @@
                     <h1>Добавени записи</h1>
                 </header>
                 <div class="added-logs-content">
-                    <table class="added-logs-table">
+                    <table class="added-logs-table" id="added-logs-tables">
                         <thead>
                             <tr>
+                                <th>Статус</th>
                                 <th>Номер</th>
                                 <th>Пулс</th>
                                 <th>Кислородна Сатурация</th>
@@ -68,4 +69,6 @@
             
         </main>
         <script src="js/simulation.js"></script>
+    </div>
 </body>
+</html>

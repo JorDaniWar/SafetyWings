@@ -28,7 +28,7 @@ if (registerForm) {
 
             if (response.ok) {
                 alert("Регистрацията беше успешна! Можете да влезете с новия си акаунт.");
-                window.location.href = 'index.html';
+                window.location.href = 'login.html';
             } else if (response.status === 400) {
                 alert("Потребителското име вече съществува! Моля, изберете друго.");
             }

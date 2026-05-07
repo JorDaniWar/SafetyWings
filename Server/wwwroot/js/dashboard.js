@@ -236,6 +236,7 @@ function renderAllLogsTable(logs) {
     logs.forEach(log => {
         const row = document.createElement('tr');
         const flightID = log.flightID || log.flightId || '-';
+        row.id = `log-row-${log.id || log.logId || log.ID}`;
 
         let dateString = '-';
         if (log.timestamp) {
@@ -312,7 +313,10 @@ function renderHistoryTable(logs) {
             <td style="text-align:center;">${rowIcon}</td>
             <td>${flightID}</td>
             <td>${dateString}</td>
-        `;
+             <td>
+        <button onclick="scrollToLog('${log.id}')">Детайли</button>
+                </td>
+            `;
         tableBody.appendChild(row);
     });
 }
@@ -365,17 +369,34 @@ function renderHealthChart(logs) {
             const month = String(d.getMonth() + 1).padStart(2, '0');
             const year = d.getFullYear();
             const hours = String(d.getHours()).padStart(2, '0');
-            const minutes = String(d.getMinutes()).padStart(2, '0');
-            const seconds = String(d.getSeconds()).padStart(2, '0');
-            formattedDate = `${day}.${month}.${year} ${hours}:${minutes}:${seconds}`;
+            const mins = String(d.getMinutes()).padStart(2, '0');
+            const secs = String(d.getSeconds()).padStart(2, '0');
+            formattedDate = `${day}.${month}.${year} ${hours}:${mins}:${secs}`;
         }
         return [flight, formattedDate];
     });
 
-    const pulseData = logs.map(l => l.heartRate || l.pulse);
-    const oxygenData = logs.map(l => l.oxygenLevel || l.oxygen);
-    const stressData = logs.map(l => l.stressIndex || l.cortisol);
-    const temperatureData = logs.map(l => l.tempInput || l.temperature)
+    const pulseData = logs.map(l => {
+        const v = Number(l.heartRate);
+        return isNaN(v) ? null : v;
+    });
+
+    const oxygenData = logs.map(l => {
+        const v = Number(l.oxygenLevel ?? l.oxygenSaturation ?? l.oxygen);
+        return isNaN(v) ? null : v;
+    });
+
+    const stressData = logs.map(l => {
+        const raw = (l.stressIndex ?? l.cortisol)?.toString().replace(',', '.');
+        const v = Number(raw);
+        return isNaN(v) ? null : v;
+    });
+
+    const temperatureData = logs.map(l => {
+        const raw = l.temperature?.toString().replace(',', '.');
+        const v = Number(raw);
+        return isNaN(v) ? null : v;
+    });
 
     healthChart = new Chart(ctx, {
         type: 'line',
@@ -416,6 +437,9 @@ function renderHealthChart(logs) {
         options: {
             responsive: true,
             maintainAspectRatio: false,
+            layout: {
+                padding: { top: 25, right: 30, bottom: 5, left: 10 }
+            },
             scales: {
                 y: {
                     beginAtZero: false,
@@ -428,28 +452,25 @@ function renderHealthChart(logs) {
                 }
             },
             plugins: {
-                legend: { labels: { color: '#fff' } },
+                legend: {
+                    labels: { color: '#fff' }
+                },
                 datalabels: {
                     display: showDataLabels,
                     color: '#fff',
                     align: 'top',
                     offset: 4,
-                    font: {
-                        size: 11,
-                        weight: 'bold'
-                    },
-                    formatter: function (value) {
-                        return value;
-                    }
+                    clamp: true,
+                    font: { size: 11, weight: 'bold' },
+                    formatter: value => value ?? ''
                 },
                 tooltip: {
                     callbacks: {
                         title: function (context) {
-                            const rawLabelArray = context[0].chart.data.labels[context[0].dataIndex];
-                            if (Array.isArray(rawLabelArray)) {
-                                return `Полет: ${rawLabelArray[0]} | Дата: ${rawLabelArray[1]}`;
-                            }
-                            return rawLabelArray;
+                            const label = context[0].chart.data.labels[context[0].dataIndex];
+                            return Array.isArray(label)
+                                ? `Полет: ${label[0]} | Дата: ${label[1]}`
+                                : label;
                         }
                     }
                 }
@@ -538,7 +559,9 @@ document.querySelectorAll('a').forEach(link => {
 
 async function verifySession() {
     const token = localStorage.getItem('token');
+
     if (!token) {
+        alert('Вие не сте влезли в профила си! Ще бъдете пренасочени към страницата за вход.');
         window.location.href = 'login.html';
         return;
     }
@@ -549,18 +572,22 @@ async function verifySession() {
         });
 
         if (!response.ok) {
+            alert("Вашата сесия е изтекла или невалидна! Ще бъдете пренасочени към формата за вход.");
             localStorage.removeItem('token');
             window.location.href = 'login.html';
             return;
         }
 
+        // If valid, load the user data (like you already do)
         const userData = await response.json();
+
         const welcomeElement = document.getElementById('welcome-name');
         if (welcomeElement) {
             const fName = userData.firstName || userData.FirstName || userData.username || "Unknown";
             const lName = userData.lastName || userData.LastName || "";
             welcomeElement.textContent = `${fName} ${lName}`;
         }
+
     } catch (error) {
         console.error("Server connection error:", error);
     }

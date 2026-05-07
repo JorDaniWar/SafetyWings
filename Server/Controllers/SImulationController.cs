@@ -34,9 +34,9 @@ namespace SafetyWings.API.Controllers
             var rnd = new Random();
 
             // 2. Генериране на параметрите (числа)
-            int heartRate = rnd.Next(1, 10) > 8 ? rnd.Next(121, 140) : rnd.Next(60, 100);
-            int oxygen = rnd.Next(1, 10) > 9 ? rnd.Next(85, 89) : rnd.Next(94, 100);
-            double temperature = Math.Round(rnd.NextDouble() * (38.5 - 36.1) + 36.1, 1);
+            int heartRate = rnd.Next(60, 140);
+            int oxygen = rnd.Next(85, 101);
+            double temperature = Math.Round(rnd.NextDouble() * (39.5 - 36.1) + 36.1, 1);
             double cortisol = Math.Round(rnd.NextDouble() * (35.0 - 5.0) + 5.0, 2);
 
             // 3. Оценка през аналитичния модул
@@ -66,9 +66,9 @@ namespace SafetyWings.API.Controllers
                 flightID = dbLog.FlightID,
                 timestamp = dbLog.Timestamp,
                 heartRate = heartRate,
-                oxygenSaturation = oxygen,
+                oxygenLevel = oxygen,
                 temperature = temperature,
-                cortisol = cortisol,
+                stressIndex = cortisol,
                 isCritical = isCritical,
                 alertNote = statusMessage
             };

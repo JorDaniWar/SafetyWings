@@ -101,7 +101,7 @@ namespace SafetyWings.API.Controllers
                 new Claim(ClaimTypes.Name, user.Username),
                 new Claim("UserId", user.UserID.ToString())
                     }),
-                    Expires = DateTime.UtcNow.AddSeconds(30), // Токенът важи 7 дни
+                    Expires = DateTime.UtcNow.AddMinutes(5), // Токенът важи 7 дни
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
                     Issuer = _configuration["Jwt:Issuer"],  
                     Audience = _configuration["Jwt:Audience"]

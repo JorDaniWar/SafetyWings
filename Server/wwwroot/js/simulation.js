@@ -99,7 +99,7 @@ document.querySelectorAll('a').forEach(link => {
 });
 
 async function startSimulationSequence() {
-    
+    const token = localStorage.getItem('token');
     simulation = true;
     // Настройки на цикъла
     const totalDuration = 10000; // 10 секунди
@@ -136,7 +136,7 @@ async function startSimulationSequence() {
                 if (result.data) {
                     addRecordToTable(result.data);
                 } else {
-                    addRecordToTable(result);
+                    addRecordToTable(result.data);
                 }
 
             } catch (error) {
@@ -164,8 +164,13 @@ async function startSimulationSequence() {
     }
 }
 function addRecordToTable(data) {
-    const tableBody = document.querySelector('#added-logs-table tbody');
     const row = document.createElement('tr');
+    const tableBody = document.getElementById('added-logs-all');
+
+    // ако има само 1 ред и е "няма записи" → махни го
+    if (tableBody.children.length === 1 && tableBody.textContent.includes('няма')) {
+        tableBody.innerHTML = '';
+    }
 
     // Стилизиране според това дали съобщението съдържа "КРИТИЧНО", "Внимание" или е "Нормално"
     let statusStyle = 'color: green;';
@@ -182,13 +187,13 @@ function addRecordToTable(data) {
     const time = new Date(data.timestamp).toLocaleTimeString('bg-BG');
 
     row.innerHTML = `
-    <td style="padding: 10px; border-bottom: 1px solid #ddd; text-align: center; ${statusStyle}">${icon} ${data.alertNote}</td>
-    <td style="padding: 10px; border-bottom: 1px solid #ddd; text-align: center;">${data.flightID}</td>     
-        <td style="padding: 10px; border-bottom: 1px solid #ddd; text-align: center;">${data.heartRate}</td>
-        <td style="padding: 10px; border-bottom: 1px solid #ddd; text-align: center;">${data.oxygenSaturation}%</td>
-        <td style="padding: 10px; border-bottom: 1px solid #ddd; text-align: center;">${data.temperature.toFixed(1)}</td>
-        <td style="padding: 10px; border-bottom: 1px solid #ddd; text-align: center;">${data.cortisol.toFixed(2)}</td>
-    <td style="padding: 10px; border-bottom: 1px solid #ddd; text-align: center;">${time}</td>
+    <td style="color: white; padding: 10px; border-bottom: 1px solid #ddd; text-align: center; ${statusStyle}">${icon} ${data.alertNote}</td>
+    <td style="color: white; padding: 10px; border-bottom: 1px solid #ddd; text-align: center;">${data.flightID}</td>     
+        <td style="color: white; padding: 10px; border-bottom: 1px solid #ddd; text-align: center;">${data.heartRate}</td>
+        <td style="color: white; padding: 10px; border-bottom: 1px solid #ddd; text-align: center;">${data.oxygenLevel}%</td>
+        <td style="color: white; padding: 10px; border-bottom: 1px solid #ddd; text-align: center;">${data.temperature.toFixed(1)}</td>
+        <td style="color: white; padding: 10px; border-bottom: 1px solid #ddd; text-align: center;">${data.stressIndex.toFixed(2)}</td>
+    <td style="color: white; padding: 10px; border-bottom: 1px solid #ddd; text-align: center;">${time}</td>
     `;
 
     tableBody.insertBefore(row, tableBody.firstChild);
@@ -196,6 +201,7 @@ function addRecordToTable(data) {
 
 showBtn.addEventListener('click', function(event){
     event.preventDefault();
+    window.location.href = 'dashboard.html#all-flights';
 });
 
 async function verifySession() {
