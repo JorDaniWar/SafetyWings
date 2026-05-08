@@ -1,0 +1,31 @@
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
+
+namespace SafetyWings.API.Models
+{
+    public class User
+    {
+        [Key] // Казва на C#, че това е Primary Key (Identity в SQL)
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int UserID { get; set; }
+
+        [Required]
+        public string Username { get; set; }
+
+        [Required]
+        public string FirstName { get; set; }
+        [Required] 
+        public string LastName { get; set; }
+
+        [Required]
+        public string PasswordHash { get; set; }
+
+        public string UserRole { get; set; } = "Pilot"; // По подразбиране
+
+        public DateTime DateCreated { get; set; } = DateTime.Now;
+
+        // НОВО: Навигационно свойство към полетите
+        public ICollection<HealthLog> HealthLog { get; set; } = new List<HealthLog>();
+    }
+}

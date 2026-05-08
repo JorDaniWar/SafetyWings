@@ -1,0 +1,282 @@
+html, body {
+    max-width: 100%;
+    overflow-x: hidden; /* Забранява хоризонталния скрол на цялата страница */
+    background-color: #0b0e14;
+    margin-left: 0px;
+    margin-right: 0px;
+    scroll-behavior: smooth;
+}
+*{
+    color: #00a8ff;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+}
+a {
+    text-decoration: none;
+}
+section {
+    scroll-margin-top: 100px;
+}
+h1{
+    text-align: center;
+    font-size: 35px;
+    font-weight:bold;
+}
+/* Клас за влизане - задейства се при hover */
+.anim-in::after {
+    animation: slideIn 0.5s forwards ease-in-out;
+}
+
+/* Клас за излизане - задейства се при махане на мишката */
+.anim-out::after {
+    animation: slideOut 0.5s forwards ease-in-out;
+}
+
+@keyframes slideIn {
+    0% { transform: scaleX(0); transform-origin: bottom left; }
+    100% { transform: scaleX(1); transform-origin: bottom left; }
+}
+
+@keyframes slideOut {
+    0% { transform: scaleX(1); transform-origin: bottom right; }
+    100% { transform: scaleX(0); transform-origin: bottom right; }
+}
+
+.main-content {
+    padding: 20px;
+    width: 100%;
+    box-sizing: border-box;
+}
+.sidebar-button{
+    border: none;
+    font-size: 35px;
+    background: transparent;
+    cursor: pointer;
+}
+.header{
+    position: fixed;
+    top: 0;
+    z-index: 1000; /* Гарантира, че хедърът ще е НАД всичко останало при скрол */
+    background-color:#0b0e14;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 80px;
+    color: #00a8ff;
+    border-bottom: solid;
+    justify-content: flex-start; /* Подрежда ги отляво надясно */
+    padding: 0 0 0 20px;         /* Малко разстояние от краищата */
+    gap: 20px;
+}
+
+.logo{
+    font-size: 40px;
+    font-weight: bold;
+}
+
+.dashboard-container {
+    padding-top: 80px; /* Оставя място за хедъра */
+    display: block;    /* МАХАМЕ grid-а, за да не се бутат елементите */
+    width: 100%;
+}
+
+section{
+    scroll-margin-top: 100px;
+}
+
+/* --- САЙДБАР И ТЪМЕН ФОН --- */
+.sidebar-overlay {
+    position: fixed;
+    top: 80px; 
+    left: 0;
+    width: 100vw;
+    height: calc(100vh - 80px);
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 998; 
+    
+    /* Скрит по подразбиране */
+    opacity: 0;
+    visibility: hidden; 
+    transition: all 0.3s ease-in-out;
+}
+.sidebar-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+.sidebar {
+    position: fixed; /* Откачаме го от страницата */
+    top: 80px; 
+    left: -252px; /* Скриваме го напълно извън екрана вляво */
+    width: 250px;
+    height: calc(100vh - 80px); 
+    background-color: #0b0e14;
+    border-right: 2px solid #00a8ff;
+    z-index: 999; /* Над тъмния фон */
+    
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 20px;
+    
+    /* Плавно плъзгане */
+    transition: left 0.3s ease-in-out;
+}
+.sidebar.active {
+    left: 0;
+    box-shadow: 5px 0 20px rgba(0,0,0,0.9);
+}
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 20px 15px;
+}
+.sidebar-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Равномерно разстояние между линковете */
+}
+.logout-btn {
+    margin-top: auto; /* Магията на Flexbox! */
+    width: 100%;
+    letter-spacing: 2px;
+    font-size: 20px;
+    background-color: #0b0e14;
+    color: red;
+    border: 1px solid red;
+    border-radius: 10px;   
+    transition: all 0.4s ease;
+    cursor: pointer;
+    font-weight: bold;
+    padding: 10px 0;
+}
+
+.logout-btn:hover {
+    color: #fff;
+    background-color: red;
+    box-shadow: 0 0 10px 5px rgba(255, 0, 0, 0.4);
+}
+.sidebar .sidebar-header{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 20px;
+}
+.sidebar a {
+    font-size: 20px;
+    font-weight: bold;
+    text-decoration: none;
+    position: relative;
+    display: inline-block;
+    color: #00a8ff;
+    padding-bottom: 5px;
+}
+
+.sidebar a::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 3px;
+    bottom: 0;
+    left: 0;
+    background-color: #00a8ff;
+    transform: scaleX(0); /* Скрита в началото */
+}
+
+/**/
+.simulation-content {
+    position: relative; /* Traps the absolute button inside this div */
+    min-height: 100px; /* Give the section some height */
+    width: 100%;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(0, 168, 255, 0.2);
+    border-radius: 8px;
+    margin-top: 15px;
+}
+
+    .simulation-content button {
+        font-weight: bold;
+        align-items: center;
+        justify-content: center;
+        background-color: #00a8ff;
+        border: 1px solid rgba(0, 168, 255, 0.2);
+        border-radius: 8px;
+        display: flex;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50% , -50%);
+        font-size: 24px;
+        color: #000;
+        cursor: pointer;
+        width: 200px;
+        height: 55px;
+        transition: all 0.3s ease;
+    }
+
+        .simulation-content button:hover {
+            background-color: #fff;
+            border-color: #fff; /* Поправено от border: #fff; */
+            color: #000;
+
+        }
+
+/**/
+.added-logs-content {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(0, 168, 255, 0.2);
+    border-radius: 8px;
+    padding: 15px;
+    margin-top: 20px;
+    overflow-x: auto; /* За да не се чупи на малки екрани */
+}
+.added-logs-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+}
+.added-logs-table th {
+    color: #00a8ff;
+    padding: 12px 15px;
+    border-bottom: 2px solid rgba(0, 168, 255, 0.5);
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 14px;
+    letter-spacing: 1px;
+    }
+
+.added-logs td {
+    padding: 12px 15px;
+    color: #e0e0e0; /* Светло сиво, за да се чете лесно на тъмния фон */
+    border-bottom: 1px solid rgba(0, 168, 255, 0.1);
+}
+
+/* Ефект при минаване с мишката върху ред */
+.added-logs tbody tr:hover {
+    background: rgba(0, 168, 255, 0.05);
+    transition: all 0.3s ease;
+}
+.show-all-logs {
+    font-weight: bold;
+    align-items: center;
+    justify-content: center;
+    background-color: #00a8ff;
+    border: 1px solid rgba(0, 168, 255, 0.2);
+    border-radius: 8px;
+    display: flex;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
+    font-size: 20px;
+    color: #000;
+    cursor: pointer;
+    width: 200px;
+    height: 55px;
+    transition: all 0.3s ease;
+}
+.show-all-logs:hover{
+    background-color: white;
+    border-color: white;
+}

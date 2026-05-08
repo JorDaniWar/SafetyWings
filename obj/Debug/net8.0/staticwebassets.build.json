@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "KpgeVFRtLv3tegex3FI47aNrqev6OvmPGl1dNt7ZEpA=",
+  "Source": "SafetyWings.API",
+  "BasePath": "_content/SafetyWings.API",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}
